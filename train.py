@@ -23,7 +23,7 @@ from models.aasist.AASIST import Model_ASSIST
 parser = argparse.ArgumentParser()
 parser.add_argument('--root', '-rt', type=str, default='../DATASETS/DTIM', help='')
 parser.add_argument('--nEpochs', '-epoch', type=int, default=15, help='')
-parser.add_argument('--batch_size', '-b', type=int, default=16, help='')
+parser.add_argument('--batch_size', '-b', type=int, default=32, help='')
 parser.add_argument('--num_workers', '-w', type=int, default=16, help='')
 parser.add_argument('--lr', '-lr', type=float, default=0.0001, help='')
 parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0], help='')
@@ -39,9 +39,6 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 G = nn.DataParallel(Generator()).to(device)
 D = nn.DataParallel(Discriminator()).to(device)
 
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 # Load the AASIST model
 with open("./models/aasist/AASIST.conf", "r") as f_json:
     assist_config = json.loads(f_json.read())
@@ -55,35 +52,6 @@ assist_model = assist_model.to(device)  # Move model to the appropriate device
 assist_model.eval()  # Set the model to evaluation mode
 
 
-# densenet = timm.create_model('densenet121', pretrained=True, num_classes=2)
-# densenet = nn.DataParallel(densenet)
-# densenet.load_state_dict(torch.load(osp.join('../FORENSICS/checkpoints/model_ours/DNSNET.pth.tar'), map_location=device, )['state_dict'])
-# densenet.to(device)
-# densenet.eval()
-
-# inception = timm.create_model('inception_v3', pretrained=True, num_classes=2)
-# inception = nn.DataParallel(inception)
-# inception.load_state_dict(torch.load(osp.join('../FORENSICS/checkpoints/model_ours/INCNET.pth.tar'), map_location=device)['state_dict'])
-# inception.to(device)
-# inception.eval()
-
-# mobilent = timm.create_model('mobilenetv3_large_100', pretrained=True, num_classes=2)
-# mobilent = nn.DataParallel(mobilent)
-# mobilent.load_state_dict(torch.load(osp.join('../FORENSICS/checkpoints/model_ours/MBLNET.pth.tar'), map_location=device)['state_dict'])
-# mobilent.to(device)
-# mobilent.eval()
-
-# resnet = timm.create_model('resnet101', pretrained=True, num_classes=2)
-# resnet = nn.DataParallel(resnet)
-# resnet.load_state_dict(torch.load(osp.join('../FORENSICS/checkpoints/model_ours/RESNET.pth.tar'), map_location=device)['state_dict'])
-# resnet.to(device)
-# resnet.eval()
-
-# xception = timm.create_model('xception', pretrained=True, num_classes=2)
-# xception = nn.DataParallel(xception)
-# xception.load_state_dict(torch.load(osp.join('../FORENSICS/checkpoints/model_ours/XCPNET.pth.tar'), map_location=device)['state_dict'])
-# xception.to(device)
-# xception.eval()
 
 train_dataset = DATAReader(args=args, split='TRAIN')
 train_loader = data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True, drop_last=True)
