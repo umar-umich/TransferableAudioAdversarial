@@ -22,7 +22,7 @@ from models.aasist.AASIST import Model_ASSIST
 from models.rsm1d.RSM1D import SSDNet1D
 from visualize import compare_audio_samples
 from tqdm import tqdm
-
+import datetime
 
 
 # natsort_key = natsort_keygen(key = lambda y: y.lower())
@@ -36,6 +36,13 @@ parser.add_argument('--lr', '-lr', type=float, default=0.0001, help='')
 parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0], help='')
 args = parser.parse_args()
 print(args)
+
+time_now = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+gen_dir_path = 'CHECKPOINTS_'+str(time_now)
+# Ensure the directory exists
+os.makedirs(gen_dir_path, exist_ok=True)
+
+
 
 gpu_devices = ','.join([str(id) for id in args.gpu_devices])
 os.environ["CUDA_VISIBLE_DEVICES"] = gpu_devices
@@ -119,6 +126,8 @@ def train(epoch):
 
         fake = G(forged)
 
+        
+
         if index == 0:
             real_audio = forged[0].detach()  # Select first sample of forged audio
             fake_audio = fake[0].detach()   # Corresponding generated audio
@@ -131,7 +140,7 @@ def train(epoch):
         adv_loss = adversarial_loss(y_real, D(fake).squeeze().detach())
         c_loss = sLoss(fake, y_real.to(dtype=torch.long))
 
-        g_loss = per_loss + adv_loss + 0.01*c_loss # 0.0001
+        g_loss = per_loss + adv_loss + 0.0001*c_loss # 0.0001
 
         g_loss.backward()
         optimizer_G.step()
@@ -213,7 +222,9 @@ def main():
             'epoch': epoch+1,
             'state_dict': G.state_dict()
         }
-        torch.save(checkpoints, osp.join('CHECKPOINTS/generator_'+str(epoch+1)+'.pth'))
+
+        # Save the checkpoint
+        torch.save(checkpoints, osp.join(gen_dir_path, f'generator_{epoch+1}.pth'))
 
         r_acc, f_acc, af_acc = test(epoch)
 

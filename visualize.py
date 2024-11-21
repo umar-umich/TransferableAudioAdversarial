@@ -5,7 +5,8 @@ import numpy as np
 from skimage.metrics import structural_similarity as ssim
 import torch
 import torchmetrics
-
+import os
+import os.path as osp
 
 import torch
 from torch import nn
@@ -22,8 +23,13 @@ from data_loader import DATAReader
 import json
 from models.aasist.AASIST import Model_ASSIST
 from itertools import islice
+import datetime
 
 
+time_now = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+wav_dir_path = 'Wav_Plot_'+str(time_now)
+# Ensure the directory exists
+os.makedirs(wav_dir_path, exist_ok=True)
 
 
 def plot_waveform_and_mel(audio1, audio2,epoch, sr=16000, title1="Real", title2="Generated"):
@@ -55,7 +61,7 @@ def plot_waveform_and_mel(audio1, audio2,epoch, sr=16000, title1="Real", title2=
 
     plt.tight_layout()
     # plt.show()
-    plt.savefig(f'./Wav_Plot/Fig_{str(epoch)}.png')
+    plt.savefig(osp.join(wav_dir_path, f'Fig_{epoch+1}.png'))
 
 
 def calculate_psnr(audio1, audio2):
