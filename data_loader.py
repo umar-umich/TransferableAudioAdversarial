@@ -9,28 +9,34 @@ class DATAReader(data.Dataset):
     def __init__(self, args=None, split=None, labels=None):
         self.args = args
         if split in 'TRAIN':
-            train_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trn.txt'
-            labels = get_labels(train_labels_file)
-            args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_train/flac'
             # load corresponding labels
-        elif split in 'TEST':
             test_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt'
             labels = get_labels(test_labels_file)
             args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_eval/flac'
-        # self.split = split
+        elif split in 'TEST':
+            train_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trn.txt'
+            labels = get_labels(train_labels_file)
+            args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_train/flac'
+                    # self.split = split
+        elif split in 'DEV':
+            dev_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.dev.trl.txt'
+            labels = get_labels(dev_labels_file)
+            args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_dev/flac'
+
         self.labels = labels  # Provided labels for real/fake classification
 
         # List real and fake files
         self.real_files = self.list_files(args, label=0)  # 0 for real
         self.fake_files = self.list_files(args, label=1)  # 1 for fake
 
-        print(f"Real files: {len(self.real_files)}, Fake files: {len(self.fake_files)}")
+        print(f"{split}, Real files: {len(self.real_files)}, Fake files: {len(self.fake_files)}")
 
         self.n = min(len(self.real_files), len(self.fake_files))  # Balance dataset
+        
+        print(f"Balanced dataset size: {self.n}")
+
 
     def __len__(self):
-        self.n = min(len(self.real_files), len(self.fake_files))  # Balance dataset
-
         return self.n
 
     def __getitem__(self, index):
@@ -82,7 +88,7 @@ def get_labels(labels_file):
     return labels
 
 
-def load_preprocess_AASIST(path, cut=64600):
+def load_preprocess_AASIST(path, cut=96000):   # 96000, 64600
     from torch import Tensor
     import soundfile as sf
 
