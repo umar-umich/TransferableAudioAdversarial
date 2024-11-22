@@ -63,7 +63,7 @@ class DiscriminatorSimple(nn.Module):
 
         # Fully connected layers (adjusted dynamically during runtime)
         # self.fc1 = None  # Placeholder for the first fully connected layer
-        self.fc1 = linear_block(32064, 256, activation="tanh")      # 47808 for ssdnet,  32064 for aasist
+        self.fc1 = linear_block(47808, 256, activation="tanh")      # 47808 for ssdnet,  32064 for aasist
 
         self.fc2 = linear_block(256, 128, activation="tanh")
         self.fc3 = linear_block(128, 1, activation="sigmoid")

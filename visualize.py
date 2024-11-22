@@ -26,13 +26,13 @@ from itertools import islice
 import datetime
 
 
-time_now = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-wav_dir_path = 'Wav_Plot_'+str(time_now)
-# Ensure the directory exists
-os.makedirs(wav_dir_path, exist_ok=True)
+# time_now = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+# wav_dir_path = 'Wav_Plot_'+str(time_now)
+# # Ensure the directory exists
+# os.makedirs(wav_dir_path, exist_ok=True)
 
 
-def plot_waveform_and_mel(audio1, audio2,epoch, sr=16000, title1="Real", title2="Generated"):
+def plot_waveform_and_mel(audio1, audio2,epoch,wav_dir_path, sr=16000, title1="Real", title2="Generated"):
     """
     Plot waveforms and Mel spectrograms of two audio samples side by side.
     """
@@ -61,7 +61,10 @@ def plot_waveform_and_mel(audio1, audio2,epoch, sr=16000, title1="Real", title2=
 
     plt.tight_layout()
     # plt.show()
+    
     plt.savefig(osp.join(wav_dir_path, f'Fig_{epoch+1}.png'))
+    # Close the figure to free memory
+    plt.close(fig)
 
 
 def calculate_psnr(audio1, audio2):
@@ -85,7 +88,7 @@ def calculate_ssim(audio1, audio2):
     return ssim(audio1, audio2, data_range=1.0)
 
 
-def compare_audio_samples(real_audio, fake_audio, epoch, sr=16000):
+def compare_audio_samples(real_audio, fake_audio, epoch, wav_dir_path, sr=16000):
     """
     Compare two audio samples using PSNR and SSIM, and plot their waveforms and spectrograms.
     """
@@ -96,7 +99,7 @@ def compare_audio_samples(real_audio, fake_audio, epoch, sr=16000):
         fake_audio = fake_audio.squeeze().cpu().numpy()
 
     # Plot waveforms and Mel spectrograms
-    plot_waveform_and_mel(real_audio, fake_audio,epoch, sr)
+    plot_waveform_and_mel(real_audio, fake_audio,epoch,wav_dir_path, sr)
 
     # Calculate PSNR
     psnr_value = calculate_psnr(real_audio, fake_audio)
@@ -105,6 +108,18 @@ def compare_audio_samples(real_audio, fake_audio, epoch, sr=16000):
     # Calculate SSIM
     ssim_value = calculate_ssim(real_audio, fake_audio)
     print(f"SSIM: {ssim_value:.4f}")
+
+    # Write results to a text file
+    results_file_path = os.path.join(wav_dir_path, f"metrics_epoch_{epoch}.txt")
+    os.makedirs(wav_dir_path, exist_ok=True)  # Ensure the directory exists
+    with open(results_file_path, "w") as file:
+        file.write(f"Epoch: {epoch}\n")
+        file.write(f"PSNR: {psnr_value:.2f}\n")
+        file.write(f"SSIM: {ssim_value:.4f}\n")
+
+    print(f"Metrics saved to {results_file_path}")
+
+
 
 
 

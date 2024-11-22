@@ -34,7 +34,7 @@ import yaml
 parser = argparse.ArgumentParser()
 parser.add_argument('--root', '-rt', type=str, default='../DATASETS/DTIM', help='')
 parser.add_argument('--nEpochs', '-epoch', type=int, default=30, help='')
-parser.add_argument('--batch_size', '-b', type=int, default=16, help='')
+parser.add_argument('--batch_size', '-b', type=int, default=24, help='')
 parser.add_argument('--num_workers', '-w', type=int, default=16, help='')
 parser.add_argument('--lr', '-lr', type=float, default=0.0001, help='')
 parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0], help='')
@@ -42,9 +42,8 @@ args = parser.parse_args()
 print(args)
 
 time_now = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-gen_dir_path = 'CHECKPOINTS_'+str(time_now)
+save_dir_path = str(time_now)
 # Ensure the directory exists
-os.makedirs(gen_dir_path, exist_ok=True)
 
 
 
@@ -104,7 +103,8 @@ test_dataset = DATAReader(args=args, split='TEST')
 test_loader = data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True, drop_last=True)
 
 perceptual_loss = nn.MSELoss() # nn.L1Loss()
-adversarial_loss = nn.BCELoss()
+# adversarial_loss = nn.BCELoss()
+adversarial_loss = nn.BCEWithLogitsLoss()
 classifiation_loss = nn.CrossEntropyLoss()
 
 optimizer_G = torch.optim.Adam(G.parameters(), lr = args.lr, betas = (0.9, 0.999), eps = 0.00000001)
@@ -112,11 +112,24 @@ optimizer_D = torch.optim.SGD(D.parameters(), lr = args.lr)
 
 scheduler_G = StepLR(optimizer_G, step_size=10, gamma=0.9)
 scheduler_D = StepLR(optimizer_D, step_size=10, gamma=0.9)
+surrogate_w = 0.0001
+model_name = 'ssdnet'
+cl_model = get_ssdnet()
+save_dir_path = f'{save_dir_path}_{model_name}_{surrogate_w}'
 
-cl_model = get_rawboost()
+wav_dir_path = 'Wav_Plot_'+save_dir_path
+os.makedirs(wav_dir_path, exist_ok=True)
+
+checkpoint_dir_path = 'CHECKPOINTS_'+save_dir_path
+os.makedirs(checkpoint_dir_path, exist_ok=True)
+
+scaler = torch.GradScaler(device)
+
 def sLoss(x, y):
     # logits = assist_model(x.squeeze(1))[1]  # Use the first item of the tuple
-    logits = cl_model(x.squeeze(1))  # x.squeeze(1) for aasist 
+    # x = x
+    # print(f"Input shape: {x.shape}")
+    logits = cl_model(x)  # x.squeeze(1) for aasist 
     # print(f"Logits: {str(logits[0])}  :   {str(logits[1])}")
     s_loss = classifiation_loss(logits, y.to(dtype=torch.long))
     # s_loss = classifiation_loss(assist_model(x.squeeze(1)), y.to(dtype=torch.long)) #+ classifiation_loss(inception(x), y.to(dtype=torch.long)) + \
@@ -127,56 +140,51 @@ def sLoss(x, y):
 def train(epoch):
     g_losses = []
     c_losses = []
-
     d_losses = []
-    # G.train()
-    # D.train()
 
     progress_bar = tqdm(train_loader, desc=f"Epoch {epoch}", unit="batch", leave=True)
-    for index, train_sample in enumerate(progress_bar):
-    # for index, train_sample in enumerate(train_loader):
-        real = train_sample[0].unsqueeze(1).to(device, dtype=torch.float)  # remove .unsqueeze(1) for aasist
-        forged = train_sample[2].unsqueeze(1).to(device, dtype=torch.float)
-        
-        # print(f'shape of real {real.shape}')
-        # print(f'shape of forged {forged.shape}')
 
-        y_real =  torch.zeros(real.shape[0]).to(device, dtype=torch.float)
-        y_fake =  torch.ones(forged.shape[0]).to(device, dtype=torch.float)
-        
-        # # ========================Generator==============================
+    for index, train_sample in enumerate(progress_bar):
+        real = train_sample[0].unsqueeze(1).to(device, dtype=torch.float)
+        forged = train_sample[2].unsqueeze(1).to(device, dtype=torch.float)
+
+        y_real = torch.zeros(real.shape[0]).to(device, dtype=torch.float)
+        y_fake = torch.ones(forged.shape[0]).to(device, dtype=torch.float)
+
+        # ========================Generator==============================
         optimizer_G.zero_grad()
 
-        fake = G(forged)
+        with torch.autocast(device_type='cuda', dtype=torch.float16):  # Enable Mixed Precision
+            fake = G(forged)
+            if index == 0:
+                real_audio = forged[0].detach()  # Select first sample of forged audio
+                fake_audio = fake[0].detach()   # Corresponding generated audio
 
+                # Plot and compare
+                compare_audio_samples(real_audio, fake_audio,epoch,wav_dir_path, sr=16000)
 
-        if index == 0:
-            real_audio = forged[0].detach()  # Select first sample of forged audio
-            fake_audio = fake[0].detach()   # Corresponding generated audio
+            per_loss = perceptual_loss(forged, fake)
+            adv_loss = adversarial_loss(y_real, D(fake).squeeze().detach())
+            c_loss = sLoss(fake, y_real.to(dtype=torch.long))
 
-            # Plot and compare
-            compare_audio_samples(real_audio, fake_audio,epoch, sr=16000)
+            g_loss = per_loss + adv_loss + surrogate_w * c_loss
 
-
-        per_loss = perceptual_loss(forged, fake)
-        adv_loss = adversarial_loss(y_real, D(fake).squeeze().detach())
-        c_loss = sLoss(fake, y_real.to(dtype=torch.long))
-
-        g_loss = per_loss + adv_loss  + c_loss # 0.0001
-
-        g_loss.backward()
-        optimizer_G.step()
+        # Scale the loss and backpropagate
+        scaler.scale(g_loss).backward()
+        scaler.step(optimizer_G)
+        scaler.update()
 
         # =======================Discriminator============================
         optimizer_D.zero_grad()
 
-        real_loss = adversarial_loss(D(real).squeeze(), y_real)
-        fake_loss = adversarial_loss(D(fake.detach()).squeeze(), y_fake)
-        d_loss = (real_loss + fake_loss) / 2
+        with torch.autocast(device_type='cuda', dtype=torch.float16):  # Enable Mixed Precision
+            real_loss = adversarial_loss(D(real).squeeze(), y_real)
+            fake_loss = adversarial_loss(D(fake.detach()).squeeze(), y_fake)
+            d_loss = (real_loss + fake_loss) / 2
 
-        d_loss.backward()
-        optimizer_D.step()
-        #=================================================================
+        scaler.scale(d_loss).backward()
+        scaler.step(optimizer_D)
+        scaler.update()
 
         g_losses.append(g_loss.item())
         c_losses.append(c_loss.item())
@@ -194,7 +202,7 @@ def train(epoch):
 
 def cal_acc(y, x):
     # outputs = inception(x)
-    outputs = cl_model(x.squeeze(1))   # (x.squeeze(1))[1] for aasist   # ssdnet_model, assist_model 
+    outputs = cl_model(x)   # (x.squeeze(1))[1] for aasist   # ssdnet_model, assist_model 
     outputs = nn.Softmax(dim=-1)(outputs)
     _, y_ = torch.max(outputs, 1)
 
@@ -206,35 +214,29 @@ def test(epoch=0):
     G.eval()
     real_acc, fake_acc, af_acc = [], [], []
 
-    progress_bar = tqdm(train_loader, desc=f"Epoch {epoch}", unit="batch", leave=True)
+    progress_bar = tqdm(test_loader, desc=f"Epoch {epoch}", unit="batch", leave=True)
 
     for test_sample in progress_bar:
         real = test_sample[0].unsqueeze(1).to(device, dtype=torch.float)
         forged = test_sample[2].unsqueeze(1).to(device, dtype=torch.float)
 
-        y_real =  torch.ones(real.shape[0]).to(device, dtype=torch.float)
-        y_fake =  torch.zeros(forged.shape[0]).to(device, dtype=torch.float)
+        y_real = torch.zeros(real.shape[0]).to(device, dtype=torch.float)
+        y_fake = torch.ones(forged.shape[0]).to(device, dtype=torch.float)
 
+        with torch.autocast(device_type='cuda', dtype=torch.float16):  # Enable Mixed Precision
+            fake = G(forged)
 
-        # ========================Generator==============================
-        optimizer_G.zero_grad()
-
-        fake = G(forged)
-        # real_audio = forged[0].detach()  # Select first sample of forged audio
-        # fake_audio = fake[0].detach()   # Corresponding generated audio
-
-        # Plot and compare
-        # compare_audio_samples(real_audio, fake_audio, sr=16000)
-        
-        real_acc.append(cal_acc(y_real, real))
-        fake_acc.append(cal_acc(y_fake, forged))
-        af_acc.append(cal_acc(y_fake, fake))
+            real_acc.append(cal_acc(y_real, real))
+            fake_acc.append(cal_acc(y_fake, forged))
+            af_acc.append(cal_acc(y_fake, fake))
 
     progress_bar.close()
-    return 100*np.mean(real_acc), 100*np.mean(fake_acc), 100*np.mean(af_acc)
+    return 100 * np.mean(real_acc), 100 * np.mean(fake_acc), 100 * np.mean(af_acc)
+
 
 def main():
     print('Training on', 2*len(train_dataset), 'and validating on ', 2*len(test_dataset), 'samples.')
+
     for epoch in range(args.nEpochs):
         g_loss, c_loss, d_loss = train(epoch)
 
@@ -250,11 +252,15 @@ def main():
         }
 
         # Save the checkpoint
-        torch.save(checkpoints, osp.join(gen_dir_path, f'generator_{epoch+1}.pth'))
+        torch.save(checkpoints, osp.join(checkpoint_dir_path, f'generator_{epoch+1}.pth'))
 
         r_acc, f_acc, af_acc = test(epoch)
 
         print('[Test] [Epoch %d/%d], [Acc: %.2f, %.2f, %.2f]'% (epoch, args.nEpochs, r_acc, f_acc, af_acc))
+        # Save test accuracies to a file
+        results_file = osp.join(checkpoint_dir_path, 'test_accuracies.txt')
+        with open(results_file, 'a') as f:
+            f.write(f"Epoch {epoch + 1}/{args.nEpochs}: Acc=({r_acc:.2f}, {f_acc:.2f}, {af_acc:.2f})\n")
 
 if __name__ == '__main__':
     main()

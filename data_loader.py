@@ -88,7 +88,7 @@ def get_labels(labels_file):
     return labels
 
 
-def load_preprocess_AASIST(path, cut=64600):   # 96000, 64600
+def load_preprocess_AASIST(path, cut=96000):   # 96000, 64600
     from torch import Tensor
     import soundfile as sf
 

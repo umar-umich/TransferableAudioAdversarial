@@ -57,7 +57,7 @@ class GeneratorSimple(nn.Module):
         return x
 
 if __name__ == '__main__':
-    G = AudioGenerator().cuda()
+    G = GeneratorSimple().cuda()
 
     # Test the generator with audio input
     inputs = torch.rand(24, 1, 64600).cuda()  # Batch size: 24, Single channel, Length: 64600
