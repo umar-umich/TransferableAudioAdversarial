@@ -4,16 +4,16 @@ from torch import nn
 def conv_block_1d(in_channels, out_channels):
     layers = nn.Sequential(
         nn.Conv1d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, stride=1, padding=1),
-        nn.ReLU(),
+        nn.Tanh(),
         nn.Conv1d(in_channels=out_channels, out_channels=out_channels, kernel_size=3, stride=1, padding=1),
-        nn.ReLU(),
+        nn.Tanh(),
         nn.Conv1d(in_channels=out_channels, out_channels=out_channels, kernel_size=1, stride=1),
-        nn.ReLU()
+        nn.Tanh()
     )
     return layers
 
 class Generator(nn.Module):
-    def __init__(self, num_layers=8, num_features=64):
+    def __init__(self, num_layers=4, num_features=128):
         super(Generator, self).__init__()
         self.num_layers = num_layers
 
@@ -21,7 +21,7 @@ class Generator(nn.Module):
 
         self.dconv = nn.Sequential(
             nn.Conv1d(num_features, num_features, kernel_size=3, stride=2, padding=1),
-            nn.ReLU(inplace=True)
+            nn.Tanh()
         )
         self.uconv = nn.ConvTranspose1d(
             num_features, num_features, kernel_size=3, stride=2, padding=1, output_padding=1
@@ -35,7 +35,7 @@ class Generator(nn.Module):
             conv_layers.append(
                 nn.Sequential(
                     nn.Conv1d(num_features, num_features, kernel_size=3, padding=1),
-                    nn.ReLU(inplace=True)
+                    nn.Tanh()
                 )
             )
 
@@ -44,7 +44,7 @@ class Generator(nn.Module):
             deconv_layers.append(
                 nn.Sequential(
                     nn.ConvTranspose1d(num_features, num_features, kernel_size=3, padding=1),
-                    nn.ReLU(inplace=True)
+                    nn.Tanh()
                 )
             )
 
@@ -52,7 +52,7 @@ class Generator(nn.Module):
         self.deconv_layers = nn.Sequential(*deconv_layers)
 
         self.uconv1 = nn.ConvTranspose1d(num_features, 1, kernel_size=3, stride=2, padding=1, output_padding=1)
-        self.relu = nn.ReLU(inplace=True)
+        self.Tanh = nn.Tanh()
 
     def forward(self, x):
         residual = x
@@ -73,16 +73,16 @@ class Generator(nn.Module):
 
             if i == 0:
                 x = x + conv_feats[conv_feats_idx]
-                x = self.relu(x)
+                x = self.Tanh(x)
                 conv_feats_idx -= 1
             elif i % 4 == 0:
                 x = self.uconv(x)
                 x = x + conv_feats[conv_feats_idx]
-                x = self.relu(x)
+                x = self.Tanh(x)
                 conv_feats_idx -= 1
 
         x = self.uconv1(x) + residual
-        x = self.relu(x)
+        x = self.Tanh(x)
 
         return x
 

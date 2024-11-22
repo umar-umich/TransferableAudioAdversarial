@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 def block1_1d(in_channels, out_channels):
     layers = nn.Sequential(
-        nn.Conv1d(in_channels=in_channels, out_channels=out_channels, kernel_size=7, stride=2, padding=3),
+        nn.Conv1d(in_channels=in_channels, out_channels=out_channels, kernel_size=7, stride=3, padding=3),
         nn.BatchNorm1d(out_channels),
         nn.Tanh(),
         nn.MaxPool1d(kernel_size=3, stride=2)
@@ -13,7 +13,7 @@ def block1_1d(in_channels, out_channels):
 
 def block2_1d(in_channels, out_channels):
     layers = nn.Sequential(
-        nn.Conv1d(in_channels=in_channels, out_channels=out_channels, kernel_size=5, stride=1, padding=2),
+        nn.Conv1d(in_channels=in_channels, out_channels=out_channels, kernel_size=5, stride=2, padding=2),
         nn.BatchNorm1d(out_channels),
         nn.Tanh(),
         nn.MaxPool1d(kernel_size=3, stride=2)
@@ -22,10 +22,10 @@ def block2_1d(in_channels, out_channels):
 
 def block3_1d(in_channels, out_channels):
     layers = nn.Sequential(
-        nn.Conv1d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=1),
+        nn.Conv1d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, stride=1),
         nn.BatchNorm1d(out_channels),
         nn.Tanh(),
-        nn.AvgPool1d(kernel_size=3, stride=2)
+        nn.AvgPool1d(kernel_size=5, stride=2)
     )
     return layers
 
@@ -49,13 +49,15 @@ class Discriminator(nn.Module):
         
         self.const_weight = nn.Parameter(torch.randn(size=[1, 1, 5]), requires_grad=True)
         
-        self.conv1 = block1_1d(1, 96)
-        self.conv2 = block2_1d(96, 64)
+        self.conv1 = block1_1d(1, 64)
+        self.conv2 = block2_1d(64, 64)
         self.conv3 = block2_1d(64, 64)
-        self.conv4 = block3_1d(64, 128)
+        self.conv4 = block3_1d(64, 64)
 
         # Initialize fully connected layers with a placeholder feature size
-        self.fc1 = None
+        # self.fc1 = None
+        self.fc1 = block4(21312, 200)
+
         self.fc2 = block4(200, 200)
         self.fc3 = block5(200, 1)
 
@@ -90,10 +92,10 @@ class Discriminator(nn.Module):
         outputs = self.conv3(outputs)
         outputs = self.conv4(outputs)
         
-        # Dynamically set the fully connected layer dimensions
-        if self.fc1 is None:
-            flattened_size = outputs.shape[1] * outputs.shape[2]
-            self.fc1 = block4(flattened_size, 200).to(outputs.device)
+        # # Dynamically set the fully connected layer dimensions
+        # if self.fc1 is None:
+        #     flattened_size = outputs.shape[1] * outputs.shape[2]
+        #     self.fc1 = block4(flattened_size, 200).to(outputs.device)
 
         outputs = torch.flatten(outputs, 1)
         outputs = self.fc1(outputs)
