@@ -8,7 +8,7 @@ from .RawNetBasicBlock import Bottle2neck, PreEmphasis
 
 
 class RawNet3(nn.Module):
-    def __init__(self, block, model_scale, context, summed, C=1024, **kwargs):
+    def __init__(self, block,kwargs, model_scale, context, summed, C=1024):
         super().__init__()
 
         nOut = kwargs["nOut"]
@@ -74,18 +74,18 @@ class RawNet3(nn.Module):
         :param x: input mini-batch (bs, samp)
         """
 
-        with torch.cuda.amp.autocast(enabled=False):
-            x = self.preprocess(x)
-            x = torch.abs(self.conv1(x))
-            if self.log_sinc:
-                x = torch.log(x + 1e-6)
-            if self.norm_sinc == "mean":
-                x = x - torch.mean(x, dim=-1, keepdim=True)
-            elif self.norm_sinc == "mean_std":
-                m = torch.mean(x, dim=-1, keepdim=True)
-                s = torch.std(x, dim=-1, keepdim=True)
-                s[s < 0.001] = 0.001
-                x = (x - m) / s
+        # with torch.cuda.amp.autocast(enabled=False):
+        x = self.preprocess(x)
+        x = torch.abs(self.conv1(x))
+        if self.log_sinc:
+            x = torch.log(x + 1e-6)
+        if self.norm_sinc == "mean":
+            x = x - torch.mean(x, dim=-1, keepdim=True)
+        elif self.norm_sinc == "mean_std":
+            m = torch.mean(x, dim=-1, keepdim=True)
+            s = torch.std(x, dim=-1, keepdim=True)
+            s[s < 0.001] = 0.001
+            x = (x - m) / s
 
         if self.summed:
             x1 = self.layer1(x)

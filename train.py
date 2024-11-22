@@ -22,7 +22,8 @@ from generator_simple2D import GeneratorSimple2D
 from models.aasist.AASIST import Model_ASSIST
 from models.rawboost.RawBoost import RawNet  # From RawBoost Repo
 from models.rsm1d.RSM1D import SSDNet1D
-from utils import batch_audio_to_mel, batch_mel_to_audio
+from models.rawnet.RawNet3 import RawNet3
+from models.rawnet.RawNetBasicBlock import Bottle2neck
 from visualize import compare_audio_samples
 from tqdm import tqdm
 import datetime
@@ -83,6 +84,24 @@ def get_ssdnet():
     ssdnet_model.eval()
     return ssdnet_model
 
+
+def get_rawnet():
+    # Define the kwargs dictionary with the nOut parameter
+    # kwargs = {
+    #     "nOut": 128,  # Specify the desired value for nOut
+    #     # Add other optional parameters as needed
+    # }
+    with open("./models/rawnet/RawNet3_AAM.yaml", 'r') as f_yaml:
+        args = yaml.load(f_yaml, Loader=yaml.FullLoader)
+
+    rawnet_model = RawNet3(
+        Bottle2neck, args, model_scale=8, context=True, summed=True
+    )
+    rawnet_model = rawnet_model.to(device)  # Move model to the appropriate device
+    # rawboost_model.eval()
+    return rawnet_model
+    
+
 def get_rawboost():
     with open("./models/rawboost/model_config_RawNet.yaml", 'r') as f_yaml:
         parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
@@ -113,12 +132,13 @@ optimizer_D = torch.optim.SGD(D.parameters(), lr = args.lr)
 scheduler_G = StepLR(optimizer_G, step_size=10, gamma=0.9)
 scheduler_D = StepLR(optimizer_D, step_size=10, gamma=0.9)
 
-cl_model = get_rawboost()
-def sLoss(x, y):
+cl_model = get_rawnet()
+def sLoss(x,x_real, y):
     # logits = assist_model(x.squeeze(1))[1]  # Use the first item of the tuple
     logits = cl_model(x.squeeze(1))  # x.squeeze(1) for aasist 
-    # print(f"Logits: {str(logits[0])}  :   {str(logits[1])}")
-    s_loss = classifiation_loss(logits, y.to(dtype=torch.long))
+    logits_real = cl_model(x_real.squeeze(1))  # x.squeeze(1) for aasist 
+    # print(f"Logits: {str(logits.shape)}")
+    s_loss = perceptual_loss(logits, logits_real)
     # s_loss = classifiation_loss(assist_model(x.squeeze(1)), y.to(dtype=torch.long)) #+ classifiation_loss(inception(x), y.to(dtype=torch.long)) + \
              #classifiation_loss(mobilent(x), y.to(dtype=torch.long)) + classifiation_loss(resnet(x), y.to(dtype=torch.long)) + \
             #classifiation_loss(xception(x), y.to(dtype=torch.long))
@@ -160,7 +180,7 @@ def train(epoch):
 
         per_loss = perceptual_loss(forged, fake)
         adv_loss = adversarial_loss(y_real, D(fake).squeeze().detach())
-        c_loss = sLoss(fake, y_real.to(dtype=torch.long))
+        c_loss = sLoss(fake, real,y_real.to(dtype=torch.long))
 
         g_loss = per_loss + adv_loss  + c_loss # 0.0001
 
@@ -212,8 +232,8 @@ def test(epoch=0):
         real = test_sample[0].unsqueeze(1).to(device, dtype=torch.float)
         forged = test_sample[2].unsqueeze(1).to(device, dtype=torch.float)
 
-        y_real =  torch.ones(real.shape[0]).to(device, dtype=torch.float)
-        y_fake =  torch.zeros(forged.shape[0]).to(device, dtype=torch.float)
+        y_real =  torch.zeros(real.shape[0]).to(device, dtype=torch.float)
+        y_fake =  torch.ones(forged.shape[0]).to(device, dtype=torch.float)
 
 
         # ========================Generator==============================
