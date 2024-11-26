@@ -91,8 +91,11 @@ def get_labels(labels_file):
 def load_preprocess_AASIST(path, cut=96000):   # 96000, 64600
     from torch import Tensor
     import soundfile as sf
+    import librosa
 
-    X, _ = sf.read(path)
+
+    # X, _ = sf.read(path)
+    X, _ = librosa.load(path, sr=16000, mono=True)  # Record_1.mp3    Derek_orig_1.wav
     X_pad = pad(X, cut)
     x_inp = Tensor(X_pad)
     if len(x_inp.shape) != 1:
