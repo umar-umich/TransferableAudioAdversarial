@@ -14,7 +14,7 @@ from sklearn.metrics import *
 from generator import Generator
 from discriminator import Discriminator
 # from compose_models import get_rawnet3
-from compose_models import RawNetWithFC
+from compose_models import RawNetWithFC, get_rawnet, get_ssdnet, get_wav2vec2_model
 from generator_simple import GeneratorSimple
 from discriminator_simple import DiscriminatorSimple
 from data_loader import DATAReader
@@ -59,64 +59,6 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 G = Generator().to(device)
 D = Discriminator().to(device)
 
-def get_aasist():
-    # Load the AASIST model
-    with open("./models/aasist/AASIST.conf", "r") as f_json:
-        assist_config = json.loads(f_json.read())
-    model_config = assist_config["model_config"]
-    # model_config = config["model_config"]
-
-    # print(f'ASSIST Conf: {str(model_config)}')
-    assist_model = Model_ASSIST(model_config)
-    assist_model.load_state_dict(torch.load("./weights/AASIST.pth", map_location=device, weights_only=True))
-    assist_model = assist_model.to(device)  # Move model to the appropriate device
-    assist_model.eval()  # Set the model to evaluation mode
-    return assist_model
-
-
-def get_ssdnet():
-    ssdnet_model = SSDNet1D()
-    num_total_learnable_params = sum(i.numel() for i in ssdnet_model.parameters() if i.requires_grad)
-    print('Number of learnable params: {}.'.format(num_total_learnable_params))
-
-    check_point = torch.load("./weights/ssdnet/ssdnet_1.64.pth", map_location=device, weights_only=True)
-    ssdnet_model.load_state_dict(check_point['model_state_dict'])
-    ssdnet_model = ssdnet_model.to(device)  # Move model to the appropriate device
-    ssdnet_model.eval()
-    return ssdnet_model
-
-
-def get_rawboost():
-    with open("./models/rawboost/model_config_RawNet.yaml", 'r') as f_yaml:
-        parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
-    rawboost_model = RawNet(parser1['model'], device)
-    rawboost_model.load_state_dict(torch.load("./weights/rawboost/Best_model.pth", map_location=device, weights_only=True))
-    rawboost_model = rawboost_model.to(device)  # Move model to the appropriate device
-    # rawboost_model.eval()
-    return rawboost_model
-
-def get_rawnet():
-    # Instantiate the model
-    rawnet_model = RawNetWithFC(embedding_dim=256, num_classes=2)#.to(device)
-    rawnet_model.load_state_dict(torch.load("./weights/rawnet_3/best_rawnet3_fc.pth", map_location=device, weights_only=True))
-    rawnet_model = rawnet_model.to(device)  # Move model to the appropriate device
-    # rawboost_model.eval()
-    return rawnet_model
-
-
-def load_wav2vec2_model():
-    # load model and processor
-    from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
-    import os
-    os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
-
-    processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-large-960h")  # facebook/wav2vec2-base-960h
-    model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-large-960h")
-    # processor = processor.to(device)
-    model = model.to(device)
-    model.eval()  # Set to evaluation mode
-    return processor, model
 
 # Function to transcribe audio to text using Wav2Vec 2.0
 def transcribe_audio(audio, processor, model):
@@ -182,12 +124,12 @@ scheduler_G = StepLR(optimizer_G, step_size=10, gamma=0.9)
 scheduler_D = StepLR(optimizer_D, step_size=10, gamma=0.9)
 s1_w = 0.0001
 s2_w = 0.0001
-t_weight = 1
+t1_weight = 1
 model_name = 'rawnet_3'
-cl_model = get_rawnet()
-cl_model2 = get_ssdnet()
-text_processor, transciption_model = load_wav2vec2_model()
-save_dir_path = f'{save_dir_path}_{model_name}_{s1_w}_{s2_w}_{t_weight}'
+cl_model = get_rawnet(device)
+cl_model2 = get_ssdnet(device)
+t_processor_1, t_model_1 = get_wav2vec2_model(device)
+save_dir_path = f'{save_dir_path}_{model_name}_{s1_w}_{s2_w}_{t1_weight}'
 
 wav_dir_path = 'Wav_Plot_'+save_dir_path
 os.makedirs(wav_dir_path, exist_ok=True)
@@ -230,8 +172,8 @@ def train(epoch):
         with torch.autocast(device_type='cuda', dtype=torch.float16):  # Enable Mixed Precision
             attacked = G(forged)
 
-            forged_transciption = transcribe_audio(forged,text_processor,transciption_model)
-            attacked_transciption = transcribe_audio(attacked,text_processor,transciption_model)
+            forged_transciption = transcribe_audio(forged,t_processor_1,t_model_1)
+            attacked_transciption = transcribe_audio(attacked,t_processor_1,t_model_1)
             if index == 0:
                 forged_audio = forged[0].detach()  # Select first sample of forged audio
                 attacked_audio = attacked[0].detach()   # Corresponding generated audio
@@ -250,7 +192,7 @@ def train(epoch):
             c1_loss = sLoss(attacked.squeeze(1), y_real.to(dtype=torch.long),cl_model)
             c2_loss = sLoss(attacked, y_real.to(dtype=torch.long),cl_model2)
 
-            g_loss = per_loss + adv_loss + s1_w * c1_loss+ s2_w*c2_loss + t_weight*t_loss
+            g_loss = per_loss + adv_loss + s1_w * c1_loss+ s2_w*c2_loss + t1_weight*t_loss
 
         # Scale the loss and backpropagate
         scaler.scale(g_loss).backward()
