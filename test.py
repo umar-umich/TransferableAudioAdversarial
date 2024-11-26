@@ -177,7 +177,7 @@ def test(model_name):
     return 100*np.mean(real_acc), 100*np.mean(fake_acc), 100*np.mean(af_acc)
 
 if __name__ == '__main__':
-    model_name = 'AASIST'  # RawNet3, AASIST, SSDNet
+    model_name = 'SSDNet'  # RawNet3, AASIST, SSDNet
     # test(model_name)
     r_acc, f_acc, af_acc = test(model_name)
     print('[Test] [[Acc: %.2f, %.2f, %.2f]'% (r_acc, f_acc, af_acc))

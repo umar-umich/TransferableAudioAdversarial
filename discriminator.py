@@ -56,7 +56,7 @@ class Discriminator(nn.Module):
 
         # Initialize fully connected layers with a placeholder feature size
         # self.fc1 = None
-        self.fc1 = block4(21312, 200)
+        self.fc1 = block4(31808, 200)
 
         self.fc2 = block4(200, 200)
         self.fc3 = block5(200, 1)

@@ -1,7 +1,6 @@
 import torch.utils.data as data
 import os
 import os.path as osp
-import soundfile as sf
 import numpy as np
 from glob import glob
 
@@ -90,7 +89,6 @@ def get_labels(labels_file):
 
 def load_preprocess_AASIST(path, cut=96000):   # 96000, 64600
     from torch import Tensor
-    import soundfile as sf
     import librosa
 
 

@@ -11,9 +11,10 @@ from torch import nn
 # import timm
 from sklearn.metrics import *
 # from natsort import natsort_keygen
-# from generator import Generator
-# from discriminator import Discriminator
+from generator import Generator
+from discriminator import Discriminator
 # from compose_models import get_rawnet3
+from compose_models import RawNetWithFC
 from generator_simple import GeneratorSimple
 from discriminator_simple import DiscriminatorSimple
 from data_loader import DATAReader
@@ -43,10 +44,10 @@ parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0], help='')
 args = parser.parse_args()
 print(args)
 
+
 time_now = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 save_dir_path = str(time_now)
 # Ensure the directory exists
-
 
 
 # gpu_devices = ','.join([str(id) for id in args.gpu_devices])
@@ -55,8 +56,8 @@ save_dir_path = str(time_now)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # print('Device being used:', device)
 
-G = GeneratorSimple().to(device)
-D = DiscriminatorSimple().to(device)
+G = Generator().to(device)
+D = Discriminator().to(device)
 
 def get_aasist():
     # Load the AASIST model
@@ -93,6 +94,15 @@ def get_rawboost():
     rawboost_model = rawboost_model.to(device)  # Move model to the appropriate device
     # rawboost_model.eval()
     return rawboost_model
+
+def get_rawnet():
+    # Instantiate the model
+    rawnet_model = RawNetWithFC(embedding_dim=256, num_classes=2)#.to(device)
+    rawnet_model.load_state_dict(torch.load("./weights/rawnet_3/best_rawnet3_fc.pth", map_location=device, weights_only=True))
+    rawnet_model = rawnet_model.to(device)  # Move model to the appropriate device
+    # rawboost_model.eval()
+    return rawnet_model
+
 
 def load_wav2vec2_model():
     # load model and processor
@@ -170,12 +180,14 @@ optimizer_D = torch.optim.SGD(D.parameters(), lr = args.lr)
 
 scheduler_G = StepLR(optimizer_G, step_size=10, gamma=0.9)
 scheduler_D = StepLR(optimizer_D, step_size=10, gamma=0.9)
-surrogate_w = 0.0001
-t_weight = 10
-model_name = 'ssdnet'
-cl_model = get_ssdnet()
+s1_w = 0.0001
+s2_w = 0.0001
+t_weight = 1
+model_name = 'rawnet_3'
+cl_model = get_rawnet()
+cl_model2 = get_ssdnet()
 text_processor, transciption_model = load_wav2vec2_model()
-save_dir_path = f'{save_dir_path}_{model_name}_{surrogate_w}_{t_weight}'
+save_dir_path = f'{save_dir_path}_{model_name}_{s1_w}_{s2_w}_{t_weight}'
 
 wav_dir_path = 'Wav_Plot_'+save_dir_path
 os.makedirs(wav_dir_path, exist_ok=True)
@@ -185,11 +197,11 @@ os.makedirs(checkpoint_dir_path, exist_ok=True)
 
 scaler = torch.GradScaler(device)
 
-def sLoss(x, y):
+def sLoss(x, y, model):
     # logits = assist_model(x.squeeze(1))[1]  # Use the first item of the tuple
     # x = x
     # print(f"Input shape: {x.shape}")
-    logits = cl_model(x)  # x.squeeze(1) for aasist 
+    logits = model(x)  # x.squeeze(1) for aasist 
     # print(f"Logits: {str(logits[0])}  :   {str(logits[1])}")
     s_loss = classifiation_loss(logits, y.to(dtype=torch.long))
     # s_loss = classifiation_loss(assist_model(x.squeeze(1)), y.to(dtype=torch.long)) #+ classifiation_loss(inception(x), y.to(dtype=torch.long)) + \
@@ -235,9 +247,10 @@ def train(epoch):
 
             per_loss = perceptual_loss(forged, attacked)
             adv_loss = adversarial_loss(y_real, D(attacked).squeeze().detach())
-            c_loss = sLoss(attacked, y_real.to(dtype=torch.long))
+            c1_loss = sLoss(attacked.squeeze(1), y_real.to(dtype=torch.long),cl_model)
+            c2_loss = sLoss(attacked, y_real.to(dtype=torch.long),cl_model2)
 
-            g_loss = per_loss + adv_loss + surrogate_w * c_loss + t_weight*t_loss
+            g_loss = per_loss + adv_loss + s1_w * c1_loss+ s2_w*c2_loss + t_weight*t_loss
 
         # Scale the loss and backpropagate
         scaler.scale(g_loss).backward()
@@ -257,7 +270,7 @@ def train(epoch):
         scaler.update()
 
         g_losses.append(g_loss.item())
-        c_losses.append(c_loss.item())
+        c_losses.append(c1_loss.item()+c2_loss.item())
         d_losses.append(d_loss.detach().cpu().numpy())
         t_losses.append(t_loss.item())
 
@@ -272,9 +285,9 @@ def train(epoch):
     progress_bar.close()  # Ensure tqdm closes cleanly when done
     return np.mean(g_losses), np.mean(c_losses), np.mean(d_losses), np.mean(t_losses)
 
-def cal_acc(y, x):
+def cal_acc(y, x, model):
     # outputs = inception(x)
-    outputs = cl_model(x)   # (x.squeeze(1))[1] for aasist   # ssdnet_model, assist_model 
+    outputs = model(x)   # (x.squeeze(1))[1] for aasist   # ssdnet_model, assist_model 
     outputs = nn.Softmax(dim=-1)(outputs)
     _, y_ = torch.max(outputs, 1)
 
@@ -285,6 +298,7 @@ def cal_acc(y, x):
 def test(epoch=0):
     G.eval()
     real_acc, fake_acc, af_acc = [], [], []
+    real2_acc,fake2_acc,af2_acc = [], [], []
 
     progress_bar = tqdm(test_loader, desc=f"Epoch {epoch}", unit="batch", leave=True)
 
@@ -292,18 +306,23 @@ def test(epoch=0):
         real = test_sample[0].unsqueeze(1).to(device, dtype=torch.float)
         forged = test_sample[2].unsqueeze(1).to(device, dtype=torch.float)
 
-        y_real = torch.ones(real.shape[0]).to(device, dtype=torch.float)
-        y_fake = torch.zeros(forged.shape[0]).to(device, dtype=torch.float)
+        y_real = torch.zeros(real.shape[0]).to(device, dtype=torch.float)
+        y_fake = torch.ones(forged.shape[0]).to(device, dtype=torch.float)
 
         with torch.autocast(device_type='cuda', dtype=torch.float16):  # Enable Mixed Precision
             fake = G(forged)
 
-            real_acc.append(cal_acc(y_real, real))
-            fake_acc.append(cal_acc(y_fake, forged))
-            af_acc.append(cal_acc(y_fake, fake))
+            real_acc.append(cal_acc(y_real, real.squeeze(1),cl_model))
+            fake_acc.append(cal_acc(y_fake, forged.squeeze(1),cl_model))
+            af_acc.append(cal_acc(y_fake, fake.squeeze(1),cl_model))
 
+
+            real2_acc.append(cal_acc(y_real, real,cl_model2))
+            fake2_acc.append(cal_acc(y_fake, forged,cl_model2))
+            af2_acc.append(cal_acc(y_fake, fake,cl_model2))
+            
     progress_bar.close()
-    return 100 * np.mean(real_acc), 100 * np.mean(fake_acc), 100 * np.mean(af_acc)
+    return 100 * np.mean(real_acc), 100 * np.mean(fake_acc), 100 * np.mean(af_acc), 100 * np.mean(real2_acc), 100 * np.mean(fake2_acc), 100 * np.mean(af2_acc) 
 
 
 def main():
@@ -326,13 +345,15 @@ def main():
         # Save the checkpoint
         torch.save(checkpoints, osp.join(checkpoint_dir_path, f'generator_{epoch+1}.pth'))
 
-        r_acc, f_acc, af_acc = test(epoch)
+        r_acc, f_acc, af_acc, r2_acc, f2_acc, af2_acc = test(epoch)
 
-        print('[Test] [Epoch %d/%d], [Acc: %.2f, %.2f, %.2f]'% (epoch, args.nEpochs, r_acc, f_acc, af_acc))
+        print('[Test Cl_1] [Epoch %d/%d], [Acc: %.2f, %.2f, %.2f]'% (epoch, args.nEpochs, r_acc, f_acc, af_acc))
+        print('[Test Cl_2] [Epoch %d/%d], [Acc: %.2f, %.2f, %.2f]'% (epoch, args.nEpochs, r2_acc, f2_acc, af2_acc))
         # Save test accuracies to a file
         results_file = osp.join(checkpoint_dir_path, 'test_accuracies.txt')
         with open(results_file, 'a') as f:
-            f.write(f"Epoch {epoch + 1}/{args.nEpochs}: Acc=({r_acc:.2f}, {f_acc:.2f}, {af_acc:.2f})\n")
+            f.write(f"Cl1: Epoch {epoch + 1}/{args.nEpochs}: Acc=({r_acc:.2f}, {f_acc:.2f}, {af_acc:.2f})\n")
+            f.write(f"Cl2: Epoch {epoch + 1}/{args.nEpochs}: Acc=({r2_acc:.2f}, {f2_acc:.2f}, {af2_acc:.2f})\n")
 
 if __name__ == '__main__':
     main()
