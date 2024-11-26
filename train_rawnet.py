@@ -14,11 +14,11 @@ from train_data_loader import RawNetDATAReader
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Instantiate the model
-binary_model = RawNetWithFC(embedding_dim=256, num_classes=2).to(device)
-
-# Loss function and optimizer
+rawnet3_model = RawNetWithFC(embedding_dim=256, num_classes=2).to(device)
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(binary_model.fc.parameters(), lr=0.001)  # Only optimize the FC layer
+optimizer = optim.Adam(rawnet3_model.parameters(), lr=0.001)  # Only optimize the FC layer
+
+scaler = torch.GradScaler()
 
 
 def calculate_eer(labels, scores):
@@ -48,8 +48,9 @@ def evaluate_model(model, val_loader):
     with torch.no_grad():
         for data in progress_bar:
             inputs, labels = data[0].to(device), data[1].to(device)
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
+            with torch.autocast(device_type='cuda', dtype=torch.float16):
+                outputs = model(inputs)
+                loss = criterion(outputs, labels)
             val_loss += loss.item()
 
             _, predicted = torch.max(outputs.data, 1)
@@ -83,6 +84,8 @@ def train_fc_layer(model, train_loader, val_loader, num_epochs=10, save_path="be
     best_auc = 0.0
     best_eer = 1.0  # Lower is better for EER
     best_model_path = save_path
+    # Loss function and optimizer
+
 
     for epoch in range(num_epochs):
         model.train()  # Set to training mode
@@ -91,17 +94,22 @@ def train_fc_layer(model, train_loader, val_loader, num_epochs=10, save_path="be
         total = 0
 
         progress_bar = tqdm(train_loader, desc=f"Epoch {epoch+1}", unit="batch")
-        for data in progress_bar:
-            inputs, labels = data[0].to(device), data[1].to(device)
+        for audio_data, label in progress_bar:
+            inputs, labels = audio_data.to(device), label.to(device)
 
             # Zero the parameter gradients
             optimizer.zero_grad()
 
-            # Forward pass
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
-            loss.backward()  # Backward pass
-            optimizer.step()
+            with torch.autocast(device_type='cuda', dtype=torch.float16):  # Mixed precision forward pass
+                # Forward pass
+                outputs = model(inputs)
+                loss = criterion(outputs, labels)
+            # Scaled backward pass
+            scaler.scale(loss).backward()
+            scaler.step(optimizer)  # Scaled optimizer step
+            scaler.update()  # Update the scaler for next iteration
+            # loss.backward()  # Backward pass
+            # optimizer.step()
 
             # Update metrics
             epoch_loss += loss.item()
@@ -139,7 +147,7 @@ def train_fc_layer(model, train_loader, val_loader, num_epochs=10, save_path="be
 # Main script
 parser = argparse.ArgumentParser()
 parser.add_argument('--root', '-rt', type=str, default='../DATASETS/DTIM', help='')
-parser.add_argument('--nEpochs', '-epoch', type=int, default=20, help='')
+parser.add_argument('--nEpochs', '-epoch', type=int, default=25, help='')
 parser.add_argument('--batch_size', '-b', type=int, default=32, help='')
 parser.add_argument('--num_workers', '-w', type=int, default=16, help='')
 parser.add_argument('--lr', '-lr', type=float, default=0.0001, help='')
@@ -154,5 +162,5 @@ train_loader = data.DataLoader(train_dataset, batch_size=args.batch_size, shuffl
 dev_dataset = RawNetDATAReader(args=args, split='DEV')
 dev_loader = data.DataLoader(dev_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
 
-best_model_path = train_fc_layer(binary_model, train_loader, dev_loader, num_epochs=args.nEpochs, save_path="./weights/rawnet_3/best_rawnet3_fc.pth")
+best_model_path = train_fc_layer(rawnet3_model, train_loader, dev_loader, num_epochs=args.nEpochs, save_path="./weights/rawnet_3/best_rawnet3.pth")
 print(f"Best model saved at: {best_model_path}")
