@@ -1,6 +1,5 @@
 import os
 import os.path as osp
-import sys
 import argparse
 import numpy as np
 from torch.utils import data
@@ -14,6 +13,7 @@ from sklearn.metrics import *
 # from natsort import natsort_keygen
 # from generator import Generator
 # from discriminator import Discriminator
+# from compose_models import get_rawnet3
 from generator_simple import GeneratorSimple
 from discriminator_simple import DiscriminatorSimple
 from data_loader import DATAReader
@@ -21,7 +21,9 @@ import json
 from generator_simple2D import GeneratorSimple2D
 from models.aasist.AASIST import Model_ASSIST
 from models.rawboost.RawBoost import RawNet  # From RawBoost Repo
+from models.rawnet.RawNetBasicBlock import Bottle2neck
 from models.rsm1d.RSM1D import SSDNet1D
+from models.rawnet.RawNet3 import RawNet3
 from utils import batch_audio_to_mel, batch_mel_to_audio
 from visualize import compare_audio_samples
 from tqdm import tqdm
@@ -34,7 +36,7 @@ import yaml
 parser = argparse.ArgumentParser()
 parser.add_argument('--root', '-rt', type=str, default='../DATASETS/DTIM', help='')
 parser.add_argument('--nEpochs', '-epoch', type=int, default=30, help='')
-parser.add_argument('--batch_size', '-b', type=int, default=24, help='')
+parser.add_argument('--batch_size', '-b', type=int, default=16, help='')
 parser.add_argument('--num_workers', '-w', type=int, default=16, help='')
 parser.add_argument('--lr', '-lr', type=float, default=0.0001, help='')
 parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0], help='')
@@ -82,6 +84,7 @@ def get_ssdnet():
     ssdnet_model.eval()
     return ssdnet_model
 
+
 def get_rawboost():
     with open("./models/rawboost/model_config_RawNet.yaml", 'r') as f_yaml:
         parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
@@ -91,7 +94,62 @@ def get_rawboost():
     # rawboost_model.eval()
     return rawboost_model
 
+def load_wav2vec2_model():
+    # load model and processor
+    from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
+    import os
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
+
+    processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-large-960h")  # facebook/wav2vec2-base-960h
+    model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-large-960h")
+    # processor = processor.to(device)
+    model = model.to(device)
+    model.eval()  # Set to evaluation mode
+    return processor, model
+
+# Function to transcribe audio to text using Wav2Vec 2.0
+def transcribe_audio(audio, processor, model):
+
+    input_values = processor(audio,sampling_rate=16000, return_tensors="pt").input_values
+
+    input_values = input_values.to(device)
+    input_values = input_values.squeeze(0)
+    input_values = input_values.squeeze(1)
+    input_values = input_values.half()  # Convert input to FP16
+
+    # Get the predicted logits from the model
+    with torch.no_grad():
+        logits = model(input_values).logits
+
+    # Decode the predicted logits to text
+    predicted_ids = torch.argmax(logits, dim=-1)
+    transcriptions = processor.batch_decode(predicted_ids)
+    return transcriptions
+
+
+def get_transciption_loss(batch_text1, batch_text2):
+    from sentence_transformers import SentenceTransformer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    if len(batch_text1) != len(batch_text2):
+        raise ValueError("Both batches must have the same number of transcriptions.")
+    
+    model = SentenceTransformer('all-MiniLM-L6-v2')  # Pretrained semantic model
+
+    # Encode both batches into embeddings
+    embeddings1 = model.encode(batch_text1)
+    embeddings2 = model.encode(batch_text2)
+    
+    # Calculate pairwise similarity and compute average loss
+    losses = [
+        1 - cosine_similarity([emb1], [emb2])[0][0]
+        for emb1, emb2 in zip(embeddings1, embeddings2)
+    ]
+    return sum(losses) / len(losses)  # Average loss
+
+    # similarity = cosine_similarity([embeddings[0]], [embeddings[1]])[0][0]
+    # return 1 - similarity  # Convert similarity to loss
 
 train_dataset = DATAReader(args=args, split='TRAIN')
 # dev_dataset = DATAReader(args=args, split='DEV')  # Add a development dataset
@@ -113,9 +171,11 @@ optimizer_D = torch.optim.SGD(D.parameters(), lr = args.lr)
 scheduler_G = StepLR(optimizer_G, step_size=10, gamma=0.9)
 scheduler_D = StepLR(optimizer_D, step_size=10, gamma=0.9)
 surrogate_w = 0.0001
+t_weight = 10
 model_name = 'ssdnet'
 cl_model = get_ssdnet()
-save_dir_path = f'{save_dir_path}_{model_name}_{surrogate_w}'
+text_processor, transciption_model = load_wav2vec2_model()
+save_dir_path = f'{save_dir_path}_{model_name}_{surrogate_w}_{t_weight}'
 
 wav_dir_path = 'Wav_Plot_'+save_dir_path
 os.makedirs(wav_dir_path, exist_ok=True)
@@ -141,6 +201,7 @@ def train(epoch):
     g_losses = []
     c_losses = []
     d_losses = []
+    t_losses = []
 
     progress_bar = tqdm(train_loader, desc=f"Epoch {epoch}", unit="batch", leave=True)
 
@@ -155,19 +216,28 @@ def train(epoch):
         optimizer_G.zero_grad()
 
         with torch.autocast(device_type='cuda', dtype=torch.float16):  # Enable Mixed Precision
-            fake = G(forged)
+            attacked = G(forged)
+
+            forged_transciption = transcribe_audio(forged,text_processor,transciption_model)
+            attacked_transciption = transcribe_audio(attacked,text_processor,transciption_model)
             if index == 0:
-                real_audio = forged[0].detach()  # Select first sample of forged audio
-                fake_audio = fake[0].detach()   # Corresponding generated audio
+                forged_audio = forged[0].detach()  # Select first sample of forged audio
+                attacked_audio = attacked[0].detach()   # Corresponding generated audio
+
+                forged_t_samples = forged_transciption
+                attacked_t_samples = attacked_transciption
 
                 # Plot and compare
-                compare_audio_samples(real_audio, fake_audio,epoch,wav_dir_path, sr=16000)
+                compare_audio_samples(forged_audio, attacked_audio, forged_t_samples, attacked_t_samples,epoch,wav_dir_path, sr=16000)
 
-            per_loss = perceptual_loss(forged, fake)
-            adv_loss = adversarial_loss(y_real, D(fake).squeeze().detach())
-            c_loss = sLoss(fake, y_real.to(dtype=torch.long))
 
-            g_loss = per_loss + adv_loss + surrogate_w * c_loss
+            t_loss = get_transciption_loss(forged_transciption,attacked_transciption)
+
+            per_loss = perceptual_loss(forged, attacked)
+            adv_loss = adversarial_loss(y_real, D(attacked).squeeze().detach())
+            c_loss = sLoss(attacked, y_real.to(dtype=torch.long))
+
+            g_loss = per_loss + adv_loss + surrogate_w * c_loss + t_weight*t_loss
 
         # Scale the loss and backpropagate
         scaler.scale(g_loss).backward()
@@ -179,7 +249,7 @@ def train(epoch):
 
         with torch.autocast(device_type='cuda', dtype=torch.float16):  # Enable Mixed Precision
             real_loss = adversarial_loss(D(real).squeeze(), y_real)
-            fake_loss = adversarial_loss(D(fake.detach()).squeeze(), y_fake)
+            fake_loss = adversarial_loss(D(attacked.detach()).squeeze(), y_fake)
             d_loss = (real_loss + fake_loss) / 2
 
         scaler.scale(d_loss).backward()
@@ -189,16 +259,18 @@ def train(epoch):
         g_losses.append(g_loss.item())
         c_losses.append(c_loss.item())
         d_losses.append(d_loss.detach().cpu().numpy())
+        t_losses.append(t_loss.item())
 
         # Update tqdm progress bar with current losses
         progress_bar.set_postfix({
             "G_Loss": f"{np.mean(g_losses):.4f}",
             "C_Loss": f"{np.mean(c_losses):.4f}",
-            "D_Loss": f"{np.mean(d_losses):.4f}"
+            "D_Loss": f"{np.mean(d_losses):.4f}",
+            "T_Loss": f"{np.mean(t_losses):.4f}",
         })
 
     progress_bar.close()  # Ensure tqdm closes cleanly when done
-    return np.mean(g_losses), np.mean(c_losses), np.mean(d_losses)
+    return np.mean(g_losses), np.mean(c_losses), np.mean(d_losses), np.mean(t_losses)
 
 def cal_acc(y, x):
     # outputs = inception(x)
@@ -220,8 +292,8 @@ def test(epoch=0):
         real = test_sample[0].unsqueeze(1).to(device, dtype=torch.float)
         forged = test_sample[2].unsqueeze(1).to(device, dtype=torch.float)
 
-        y_real = torch.zeros(real.shape[0]).to(device, dtype=torch.float)
-        y_fake = torch.ones(forged.shape[0]).to(device, dtype=torch.float)
+        y_real = torch.ones(real.shape[0]).to(device, dtype=torch.float)
+        y_fake = torch.zeros(forged.shape[0]).to(device, dtype=torch.float)
 
         with torch.autocast(device_type='cuda', dtype=torch.float16):  # Enable Mixed Precision
             fake = G(forged)
@@ -238,13 +310,13 @@ def main():
     print('Training on', 2*len(train_dataset), 'and validating on ', 2*len(test_dataset), 'samples.')
 
     for epoch in range(args.nEpochs):
-        g_loss, c_loss, d_loss = train(epoch)
+        g_loss, c_loss, d_loss, t_loss = train(epoch)
 
         scheduler_G.step()
         scheduler_D.step()
 
-        print("[Train] [Epoch %d/%d], [LR: G=%f, D=%f], [C loss: %f], [D loss: %f], [G loss: %f]" % (
-            epoch, args.nEpochs, scheduler_G.get_last_lr()[0],  scheduler_D.get_last_lr()[0], c_loss, d_loss, g_loss))
+        print("[Train] [Epoch %d/%d], [LR: G=%f, D=%f], [C loss: %f], [D loss: %f], [G loss: %f], [T loss: %f]" % (
+            epoch, args.nEpochs, scheduler_G.get_last_lr()[0],  scheduler_D.get_last_lr()[0], c_loss, d_loss, g_loss, t_loss))
 
         checkpoints = {
             'epoch': epoch+1,
