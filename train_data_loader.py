@@ -31,9 +31,15 @@ class RawNetDATAReader(data.Dataset):
             self.file_paths.extend([(path, label) for path in self.list_files(args, label)])
 
         print(f"{split}, Total samples: {len(self.file_paths)}")
+        # min label count
+        count_label_0 = sum(1 for label in self.labels.values() if label == 0)
+        count_label_1 = sum(0 for label in self.labels.values() if label == 1)
 
-    def __len__(self):
-        return len(self.file_paths)
+        self.n = min(count_label_0, count_label_1)  # Balance dataset
+        print('Balanced samples: {self.n}')
+
+    def __len__(self):        
+        return self.n
 
     def __getitem__(self, index):
         file_path, label = self.file_paths[index]
