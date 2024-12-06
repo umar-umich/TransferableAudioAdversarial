@@ -33,6 +33,8 @@ class GeneratorSimple(nn.Module):
             nn.Conv1d(128, 1, kernel_size=3, stride=1, padding=1),  # Reduces to 1 channel for audio
             nn.Tanh()
         )
+        self.Tanh = nn.Tanh()
+
         
     def forward(self, x):
         residual = x  # Save input as residual
@@ -54,7 +56,7 @@ class GeneratorSimple(nn.Module):
         # Add residual (optional based on use case)
         x = x + residual
         
-        return x
+        return self.Tanh(x)
 
 if __name__ == '__main__':
     G = GeneratorSimple().cuda()

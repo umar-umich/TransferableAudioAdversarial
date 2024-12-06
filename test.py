@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.metrics import *
 from tqdm import tqdm
 # from natsort import natsort_keygen
+from compose_models import get_inc_ssdnet
 from generator import Generator
 from discriminator import Discriminator
 from data_loader import DATAReader
@@ -107,22 +108,30 @@ def cal_acc(model_name, y, x):
     if 'AASIST' in model_name:
         assist_model = get_aasist()
         outputs = assist_model(x.squeeze(1))
-        print(f'Shape of AASIST output: {str(outputs[0].shape)}: {str(outputs[1].shape)}')
+        # print(f'Shape of AASIST output: {str(outputs[0].shape)}: {str(outputs[1].shape)}')
         predictions = outputs[1]
     elif 'RawNet3' in model_name:
         rawnet3 = get_rawnet3_binary_classifier()
         outputs = rawnet3(x.squeeze(1))
-        print(f'Shape of rawnet output: {str(outputs.shape)}')
+        # print(f'Shape of rawnet output: {str(outputs.shape)}')
         predictions = outputs
     
     elif 'SSDNet' in model_name:
         ssdnet = get_ssdnet()
         # x = x.unsqueeze(1)  # Add channel dimension
-        print(f'Shape of input : {str(x.shape)}')
+        # print(f'Shape of input : {str(x.shape)}')
         outputs = ssdnet(x)
-        print(f'Shape of ssdnet output: {str(outputs.shape)}')
+        # print(f'Shape of ssdnet output: {str(outputs.shape)}')
         predictions = outputs
-        
+    elif 'Inc_SSDNet' in model_name:
+        inc_ssdnet = get_inc_ssdnet(device)
+        # x = x.unsqueeze(1)  # Add channel dimension
+        # print(f'Shape of input : {str(x.shape)}')
+        outputs = inc_ssdnet(x)
+        # print(f'Shape of ssdnet output: {str(outputs.shape)}')
+        predictions = outputs
+
+
     predictions = nn.Softmax(dim=-1)(predictions)
     _, y_ = torch.max(predictions, 1)
 
@@ -140,8 +149,8 @@ def test(model_name):
     args = parser.parse_args()
     print(args)
 
-    test_dataset = DATAReader(args=args, split='TEST')
-    test_loader = data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True, drop_last=True)
+    test_dataset = DATAReader(args=args, split='In_The_Wild')
+    test_loader = data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
 
     # print('Device being used:', device)
 
@@ -149,7 +158,7 @@ def test(model_name):
     G = GeneratorSimple()
 
 
-    checkpoint = torch.load("./CHECKPOINTS_2024-11-25-14-38-25_ssdnet_0.0001_10/generator_27.pth", map_location=device, weights_only=False)
+    checkpoint = torch.load("./CHECKPOINTS_2024-11-28-10-37-09_ssdnet_inc_ssdnet_0.0001_0.0001_5_5/generator_33.pth", map_location=device, weights_only=False)
     state_dict = checkpoint['state_dict']
 
     # Remove 'module.' prefix from keys
@@ -177,7 +186,7 @@ def test(model_name):
     return 100*np.mean(real_acc), 100*np.mean(fake_acc), 100*np.mean(af_acc)
 
 if __name__ == '__main__':
-    model_name = 'SSDNet'  # RawNet3, AASIST, SSDNet
+    model_name = 'Inc_SSDNet'  # RawNet3, AASIST, SSDNet, Inc_SSDNet
     # test(model_name)
     r_acc, f_acc, af_acc = test(model_name)
     print('[Test] [[Acc: %.2f, %.2f, %.2f]'% (r_acc, f_acc, af_acc))
