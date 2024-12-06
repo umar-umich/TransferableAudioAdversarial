@@ -2,6 +2,8 @@ import torch
 import librosa
 import numpy as np
 
+from compose_models import get_speech_to_text_model
+
 def batch_audio_to_mel(batch_audio, sr, n_mels=128, n_fft=2048, hop_length=512):
     """
     Convert a batch of raw audio signals to Mel spectrograms.
@@ -71,16 +73,83 @@ def batch_mel_to_audio(batch_mel, sr, n_fft=2048, hop_length=512, original_lengt
 #     audio_tensor = torch.tensor(padded_audio).unsqueeze(1).float()  # Add batch and channel dimensions
 #     return audio_tensor.to(batch_mel.device)
 
+
+# Function to transcribe audio to text using Wav2Vec 2.0
+def transcribe_audio(audio, processor, model,device):
+
+    input_values = processor(audio,sampling_rate=16000, return_tensors="pt").input_values
+
+    input_values = input_values.to(device)
+    input_values = input_values.squeeze(0)
+    input_values = input_values.squeeze(1)
+    input_values = input_values.half()  # Convert input to FP16
+
+    # Get the predicted logits from the model
+    with torch.no_grad():
+        logits = model(input_values).logits
+
+    # Decode the predicted logits to text
+    predicted_ids = torch.argmax(logits, dim=-1)
+    transcriptions = processor.batch_decode(predicted_ids)
+    return transcriptions
+
+
+# Function to transcribe audio to text using Wav2Vec 2.0
+def transcribe_s2t(audio, processor, model,device):
+
+    input_features = processor(audio,sampling_rate=16000, return_tensors="pt").input_features
+
+    # input_values = input_values.to(device)
+    # input_values = input_values.squeeze(0)
+    # input_values = input_values.squeeze(1)
+    # input_values = input_values.half()  # Convert input to FP16
+
+    input_features = input_features.to(device)
+    generated_ids = model.generate(input_features=input_features)#input_values["input_features"], attention_mask=input_values["attention_mask"])
+
+    transcription = processor.decode(generated_ids)
+    return transcription
+
+    # # Get the predicted logits from the model
+    # with torch.no_grad():
+    #     logits = model(input_values).logits
+
+    # # Decode the predicted logits to text
+    # predicted_ids = torch.argmax(logits, dim=-1)
+    # transcriptions = processor.batch_decode(predicted_ids)
+    # return transcriptions
+
+
+def get_transciption_loss(batch_text1, batch_text2):
+    from sentence_transformers import SentenceTransformer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    if len(batch_text1) != len(batch_text2):
+        raise ValueError("Both batches must have the same number of transcriptions.")
+    
+    model = SentenceTransformer('all-MiniLM-L6-v2')  # Pretrained semantic model
+
+    # Encode both batches into embeddings
+    embeddings1 = model.encode(batch_text1)
+    embeddings2 = model.encode(batch_text2)
+    
+    # Calculate pairwise similarity and compute average loss
+    losses = [
+        1 - cosine_similarity([emb1], [emb2])[0][0]
+        for emb1, emb2 in zip(embeddings1, embeddings2)
+    ]
+    return sum(losses) / len(losses)  # Average loss
+
 if __name__ == "__main__":
     # Sample input
-    batch_audio = torch.randn(32, 1, 64600).to('cuda')  # Batch of audio signals
+    # batch_audio = torch.randn(32, 1, 96000)#.to('cuda')  # Batch of audio signals
+    path = "./Derek_orig_1.wav"
+    X, _ = librosa.load(path, sr=16000, mono=True)  # Record_1.mp3    Derek_orig_1.wav
+
     sr = 16000
+    device='cuda'
+    processor, model = get_speech_to_text_model(device)
 
-    # Convert to Mel spectrograms
-    mel_specs = batch_audio_to_mel(batch_audio, sr)
+    forged_transciption = transcribe_s2t(X,processor, model,device)
+    print(str(forged_transciption))
 
-    # Pass Mel spectrograms through your generator model (example)
-    # generated_mel_specs = G(mel_specs)
-
-    # Convert back to raw audio
-    generated_audio = batch_mel_to_audio(mel_specs, sr)

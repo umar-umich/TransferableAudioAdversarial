@@ -6,9 +6,10 @@ from torch import nn
 import yaml
 from models.aasist.AASIST import Model_ASSIST
 from models.rawboost.RawBoost import RawNet
+from models.rawnet.RawNet2 import RawNet2
 from models.rawnet.RawNet3 import RawNet3
 from models.rawnet.RawNetBasicBlock import Bottle2neck
-from models.rsm1d.RSM1D import SSDNet1D
+from models.rsm1d.RSM1D import DilatedNet, SSDNet1D
 
 
 def get_rawnet3():
@@ -80,6 +81,18 @@ def get_ssdnet(device):
     ssdnet_model.eval()
     return ssdnet_model
 
+def get_inc_ssdnet(device):
+    inc_ssdnet = DilatedNet()
+    num_total_learnable_params = sum(i.numel() for i in inc_ssdnet.parameters() if i.requires_grad)
+    print('Number of learnable params: {}.'.format(num_total_learnable_params))
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    check_point = torch.load("./weights/ssdnet/ssdnet_1.09.pth", map_location=device, weights_only=True)
+    inc_ssdnet.load_state_dict(check_point['model_state_dict'])
+    inc_ssdnet = inc_ssdnet.to(device)  # Move model to the appropriate device
+    inc_ssdnet.eval()
+    return inc_ssdnet
+
 
 def get_rawboost(device):
     with open("./models/rawboost/model_config_RawNet.yaml", 'r') as f_yaml:
@@ -90,10 +103,19 @@ def get_rawboost(device):
     rawboost_model.eval()
     return rawboost_model
 
-def get_rawnet(device):
+def get_rawnet3(device):
     # Instantiate the model
     rawnet_model = RawNetWithFC(embedding_dim=256, num_classes=2)#.to(device)
     rawnet_model.load_state_dict(torch.load("./weights/rawnet_3/best_rawnet3.pth", map_location=device, weights_only=True))
+    rawnet_model = rawnet_model.to(device)  # Move model to the appropriate device
+    rawnet_model.eval()
+    return rawnet_model
+
+def get_rawnet2(device):
+    with open("./models/rawnet/RawNet2_config.yaml", 'r') as f_yaml:
+        parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
+    rawnet_model = RawNet2(parser1['model'], device)
+    rawnet_model.load_state_dict(torch.load("./weights/rawnet_2/pre_trained_DF_RawNet2.pth", map_location=device, weights_only=True))
     rawnet_model = rawnet_model.to(device)  # Move model to the appropriate device
     rawnet_model.eval()
     return rawnet_model
@@ -108,6 +130,22 @@ def get_wav2vec2_model(device):
 
     processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-large-960h")  # facebook/wav2vec2-base-960h
     model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-large-960h")
+    # processor = processor.to(device)
+    model = model.to(device)
+    model.eval()  # Set to evaluation mode
+    return processor, model
+
+
+
+def get_speech_to_text_model(device):
+    # load model and processor
+    from transformers import Speech2TextProcessor, Speech2TextForConditionalGeneration
+    import os
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+    processor = Speech2TextProcessor.from_pretrained("facebook/s2t-small-librispeech-asr")
+    model = Speech2TextForConditionalGeneration.from_pretrained("facebook/s2t-small-librispeech-asr")
+
     # processor = processor.to(device)
     model = model.to(device)
     model.eval()  # Set to evaluation mode
