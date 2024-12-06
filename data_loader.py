@@ -3,6 +3,8 @@ import os
 import os.path as osp
 import numpy as np
 from glob import glob
+import csv
+
 
 class DATAReader(data.Dataset):
     def __init__(self, args=None, split=None, labels=None):
@@ -21,6 +23,10 @@ class DATAReader(data.Dataset):
             dev_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.dev.trl.txt'
             labels = get_labels(dev_labels_file)
             args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_dev/flac'
+        elif split in 'In_The_Wild':
+            dev_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/release_in_the_wild/meta.csv'
+            labels = get_in_the_wild_labels(dev_labels_file)
+            args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/release_in_the_wild'
 
         self.labels = labels  # Provided labels for real/fake classification
 
@@ -62,7 +68,7 @@ class DATAReader(data.Dataset):
         dataset_path = self.args.data_root  # Assuming split is 'TRAIN' or 'TEST'
 
         for file_name in os.listdir(dataset_path):
-            if file_name.endswith('.flac'):  # Audio files of interest
+            if file_name.endswith('.flac') or file_name.endswith('.wav'):  # Audio files of interest
                 file_path = os.path.join(dataset_path, file_name)
 
                 # Check label (real=0, fake=1)
@@ -84,6 +90,22 @@ def get_labels(labels_file):
                 file_id = parts[1].strip()  # Extract the file_id
                 label = parts[-1].strip()   # Extract the label (e.g., "spoof" or "bonafide")
                 labels[file_id] = 1 if label == 'spoof' else 0  # 1 for fake, 0 for real
+    return labels
+
+
+def get_in_the_wild_labels(labels_file):
+    labels = {}
+    with open(labels_file, mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.DictReader(file, delimiter=',')  # Assuming tab-separated CSV, adjust delimiter if needed
+        # print("CSV Headers:", reader.fieldnames)  # This will show you the headers of the CSV
+
+        for row in reader:
+            file_id = os.path.splitext(row['file'].strip())[0]  # Strip extension from 'file' (e.g., '0.wav' -> '0')
+            label = row['label'].strip()   # Extract the label (e.g., 'spoof' or 'bona-fide')
+            
+            # Map the label to 1 (spoof) or 0 (bona-fide)
+            labels[file_id] = 1 if label == 'spoof' else 0
+    
     return labels
 
 
@@ -113,27 +135,31 @@ def pad(x, max_len=64600):
 
 
 if __name__ == '__main__':
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--data_root', '-rt', type=str, default='/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_eval/flac', help='Root directory for the dataset')
-    parser.add_argument('--split', '-sp', type=str, default='TRAIN', help='Split of the dataset (e.g., TRAIN, TEST)')
-    parser.add_argument('--labels_file', '-lf', type=str, default='/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt', help='Path to the labels file')
-    parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0, 1], help='GPU devices to use')
+    dev_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/release_in_the_wild/meta.csv'
+    labels = get_in_the_wild_labels(dev_labels_file)
+    print(labels)
+
+    # import argparse
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('--data_root', '-rt', type=str, default='/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_eval/flac', help='Root directory for the dataset')
+    # parser.add_argument('--split', '-sp', type=str, default='TRAIN', help='Split of the dataset (e.g., TRAIN, TEST)')
+    # parser.add_argument('--labels_file', '-lf', type=str, default='/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt', help='Path to the labels file')
+    # parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0, 1], help='GPU devices to use')
     
-    args = parser.parse_args()
+    # args = parser.parse_args()
 
-    # Get the labels from the provided text file
-    test_labels = get_labels(args.labels_file)
+    # # Get the labels from the provided text file
+    # test_labels = get_labels(args.labels_file)
 
-    # Initialize the dataset and dataloader
-    train_dataset = DATAReader(args=args, split=args.split, labels=test_labels)
-    train_loader = data.DataLoader(train_dataset, batch_size=24, shuffle=True)
+    # # Initialize the dataset and dataloader
+    # train_dataset = DATAReader(args=args, split=args.split, labels=test_labels)
+    # train_loader = data.DataLoader(train_dataset, batch_size=24, shuffle=True)
 
-    print('Total train files: ', len(train_dataset))
+    # print('Total train files: ', len(train_dataset))
 
-    # Example: Iterate through the dataset
-    for batch_idx, (real_data, real_label, fake_data, fake_label) in enumerate(train_loader):
-        print(f"Batch {batch_idx+1}")
-        print(f"Real data shape: {real_data.shape}, Real label: {real_label}")
-        print(f"Fake data shape: {fake_data.shape}, Fake label: {fake_label}")
-        break  # Only for demonstration purposes, break after the first batch
+    # # Example: Iterate through the dataset
+    # for batch_idx, (real_data, real_label, fake_data, fake_label) in enumerate(train_loader):
+    #     print(f"Batch {batch_idx+1}")
+    #     print(f"Real data shape: {real_data.shape}, Real label: {real_label}")
+    #     print(f"Fake data shape: {fake_data.shape}, Fake label: {fake_label}")
+    #     break  # Only for demonstration purposes, break after the first batch
