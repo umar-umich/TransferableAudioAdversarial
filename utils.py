@@ -97,27 +97,21 @@ def transcribe_audio(audio, processor, model,device):
 # Function to transcribe audio to text using Wav2Vec 2.0
 def transcribe_s2t(audio, processor, model,device):
 
-    input_features = processor(audio,sampling_rate=16000, return_tensors="pt").input_features
+    audio = audio.squeeze(1).detach().cpu().numpy()
+    input_features = processor(
+        audio,
+        sampling_rate=16_000,
+        return_tensors="pt"
+    ).input_features
 
-    # input_values = input_values.to(device)
-    # input_values = input_values.squeeze(0)
-    # input_values = input_values.squeeze(1)
-    # input_values = input_values.half()  # Convert input to FP16
+    # Ensure input features match the model's dtype and are on the correct device
+    input_features = input_features.to(device).to(model.dtype)
 
-    input_features = input_features.to(device)
-    generated_ids = model.generate(input_features=input_features)#input_values["input_features"], attention_mask=input_values["attention_mask"])
+    # Generate transcription
+    generated_ids = model.generate(input_features=input_features)
+    transcription = processor.batch_decode(generated_ids, skip_special_tokens=True)
 
-    transcription = processor.decode(generated_ids)
     return transcription
-
-    # # Get the predicted logits from the model
-    # with torch.no_grad():
-    #     logits = model(input_values).logits
-
-    # # Decode the predicted logits to text
-    # predicted_ids = torch.argmax(logits, dim=-1)
-    # transcriptions = processor.batch_decode(predicted_ids)
-    # return transcriptions
 
 
 def get_transciption_loss(batch_text1, batch_text2):
