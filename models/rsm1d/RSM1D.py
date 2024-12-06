@@ -202,6 +202,13 @@ if __name__ == '__main__':
     x2 = torch.randn(2, 1, 432, 400)
     y1 = Res_TSSDNet(x1)
     y2 = Res_TSSDNet_2D(x2)
+
+    num_total_learnable_params = sum(i.numel() for i in Inc_TSSDNet.parameters() if i.requires_grad)
+    print('Number of learnable params: {}.'.format(num_total_learnable_params))
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    check_point = torch.load("./weights/ssdnet/ssdnet_1.09.pth", map_location=device, weights_only=True)
+    Inc_TSSDNet.load_state_dict(check_point['model_state_dict'])
     y3 = Inc_TSSDNet(x1)
 
     print('End of Program.')

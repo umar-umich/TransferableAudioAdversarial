@@ -88,7 +88,7 @@ def calculate_ssim(audio1, audio2):
     return ssim(audio1, audio2, data_range=1.0)
 
 
-def compare_audio_samples(real_audio, fake_audio,forged_t_sample, attacked_t_sample, epoch, wav_dir_path, sr=16000):
+def compare_audio_samples(real_audio, fake_audio, forged_transciption1, attacked_transciption1, forged_transciption2, attacked_transciption2, epoch, wav_dir_path, sr=16000):
     """
     Compare two audio samples using PSNR and SSIM, and plot their waveforms and spectrograms.
     """
@@ -116,11 +116,18 @@ def compare_audio_samples(real_audio, fake_audio,forged_t_sample, attacked_t_sam
         file.write(f"Epoch: {epoch+1}\n")
         file.write(f"PSNR: {psnr_value:.2f}\n")
         file.write(f"SSIM: {ssim_value:.4f}\n")
-        file.write("\nForged and Attacked Transcriptions:\n")
+        file.write("\nForged and Attacked Transcriptions (T1):\n")
         file.write(f"{'Forged Transcription':<100} | {'Attacked Transcription':<100}\n")
         file.write("=" * 205 + "\n")
 
-        for forged, attacked in zip(forged_t_sample, attacked_t_sample):
+        for forged, attacked in zip(forged_transciption1, attacked_transciption1):
+            file.write(f"{forged:<100} | {attacked:<100}\n")
+
+        file.write("\nForged and Attacked Transcriptions (T2):\n")
+        file.write(f"{'Forged Transcription':<100} | {'Attacked Transcription':<100}\n")
+        file.write("=" * 205 + "\n")
+
+        for forged, attacked in zip(forged_transciption2, attacked_transciption2):
             file.write(f"{forged:<100} | {attacked:<100}\n")
 
     print(f"Metrics saved to {results_file_path}")
