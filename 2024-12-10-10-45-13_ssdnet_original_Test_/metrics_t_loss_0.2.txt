@@ -1,0 +1,220 @@
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THEY WERESOME SMLL SOCIAL THEY WERE SOME SMELL SOCIAL THEY WERE SOME SMELL S']
+ Attacked without Transcription Loss                                                                  
+ ['EDISON SMALSI SHO EDISON SALSI SHO EDISON MALS']
+ Attacked with Transcription Loss                                                                     
+ ['THEY WERESOME SMLL SOCIAL THEY WERE SOME SMELL SOCIAL THEY WERE SOME SMELL S']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THAT E CLAIME WAS ESSENTIAL THAT E CLAIMED WAS ESSENTIAL THAT E CLAIMED WAS ESSENTIAL THAT E']
+ Attacked without Transcription Loss                                                                  
+ ['THAT ICLENED WAS ESSENTIAL THAT ICLENED WAS ESSENTIAL THAT ICLENED WAS ESSENTIAL THAT I']
+ Attacked with Transcription Loss                                                                     
+ ['THAT HE CLAIME WAS ESSENTIAL THAT HE CLAIMED WAS ESSENTIAL THAT HE CLAIMED WAS ESSENTIAL THAT HE']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IT IS AUDIBLE IT IS AUDIBLE']
+ Attacked without Transcription Loss                                                                  
+ ['IT DITHAUTIBLE IT DITHAUTIBLE']
+ Attacked with Transcription Loss                                                                     
+ ['IT IS AUDIBLE IT IS AUDIBLE']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['I CAME UP THREE OF THE RANKS I CAME UP THREE O THE RANKS']
+ Attacked without Transcription Loss                                                                  
+ ['I CAVE UP THREE THE LENGTH I CAVE UP THREE THE LENGTH']
+ Attacked with Transcription Loss                                                                     
+ ['I CAME UP THREE F THE RANKS I CAME UP THREE O THE RANKS']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THE MATTER WILL BE CONSIDERED IN DUE COURSED KING ACCOUNT OF THAT REPORT THE MATTER WILL BE CONSIDERED IN DUE COURSE SI']
+ Attacked without Transcription Loss                                                                  
+ ['THE MATTER WILL BE CONSIDERED IN DUE COURSE TIKING ACCOUNT OF THAT REVULT THE MATTER WILL BE CONSIDERED N DUE COURSE SI']
+ Attacked with Transcription Loss                                                                     
+ ['THE MATTER WILL BE CONSIDERED IN DUE COURSED KING ACCOUNT OF THAT REPORT THE MATTER WILL BE CONSIDERED IN DUE COURSE SI']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THERE MAY BE HOPE THIS YEAR HOWEVER THERE MAY BE HOPE THIS YEAR HOWEVER THERE MAY BE HOPE THIS YEAR HOWEVER THERE M']
+ Attacked without Transcription Loss                                                                  
+ ['THEN MAY BE HOPED THIS YEAR HOEVER THEN MAY BEHOPED THIS YEAR HOEVER THEN MAY BE HOPE THIS YEAR OEVER THEN M']
+ Attacked with Transcription Loss                                                                     
+ ['THERE MAY BE HOPE THIS YEAR HOWEVER THERE MAY BE HOPE THIS YEAR HOWEVER THERE MAY BE HOPE THIS YEAR HOWEVER THERE M']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IT WAS A LAUBAN IT WAS A LAUBAN IT WAS A LAUBAN IT WAS A LAUBAN IT WAS A LAUBAN IT WAS A LAU']
+ Attacked without Transcription Loss                                                                  
+ ['IT WAS A LAMBAN IT WAS A LAMBAN IT WAS A LAMBAN IT WAS A LAMBAN IT WAS A LAMBAN IT WAS A LAM']
+ Attacked with Transcription Loss                                                                     
+ ['IT WAS A LAUBAN IT WAS A LAUBAN IT WAS A LAUBAN IT WAS A LAUBAN IT WAS A LAUBAN IT WAS A LAU']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IT IS VERY BEADFUL FISSY IT IS VERY BEA']
+ Attacked without Transcription Loss                                                                  
+ ['IN PALAGESE FOR FITTY IN PALAGE']
+ Attacked with Transcription Loss                                                                     
+ ['IT IS VERY BEAGFUL FISSY IT IS VERY BEA']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THERE IS NO POINT IN OOKING ANY FRTHER THERE IS NO POINT IN LOKIN ANY FURTHER']
+ Attacked without Transcription Loss                                                                  
+ ['THERE IS NO POINT IN LOKIATY FURTHER THERE IS NO POINT IN LOCIGATY FRTHE']
+ Attacked with Transcription Loss                                                                     
+ ['THERE IS NO POINT IN OOKING ANY FRTHER THERE IS NO POINT IN LOKIN ANY FURTHE']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['AT THE MOMENT IT SEEMS INCOMPLETE AT THE MOMENT IT SEEMS INCOMPLETE AT THE MOMENT IT SEEMS INCOMPLE']
+ Attacked without Transcription Loss                                                                  
+ ['AT THE MOMENT IT SCENES IN COMPLETE AT THE MOMENT IT SCENES IN COMPLETE AT THE MOMENT IT SCENES IN COMPLEE']
+ Attacked with Transcription Loss                                                                     
+ ['AT THE MOMENT IT SEEMS INCOMPLETE AT THE MOMENT IT SEEMS INCOMPLETE AT THE MOMENT IT SEEMS INCOMPLEE']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['RAINGEDERS WAS AN AENT AND I AM UNRESTAED RAINGEDERS WAS AN DENTA AND I AM UNTRESTALD RAINGEDRS']
+ Attacked without Transcription Loss                                                                  
+ ['RANGELES WHOSE AN ADENT AND I AM UNTRUSTED RNGELRS WHOSE AN ADENTA AN I AM UNTRUSTED RANGELERS']
+ Attacked with Transcription Loss                                                                     
+ ['RAIN GEDER WAS AN AENT AND I AM UNRESTALED RAINGEDERS WAS AN DENTA AND I AM UNTRESTALD RANGEDRS']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HE IS THE SAVIOUR OF SOUTH AFRICA HE IS THE SAVIOUR OF']
+ Attacked without Transcription Loss                                                                  
+ ['HE IS BESEDIO SOUTH AFLICA HE IS BESEDIO S']
+ Attacked with Transcription Loss                                                                     
+ ['HE IS THE SAVIOUR OF SOUTH AFRICA HE IS THE SAVIOUR OF']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THEY SHOULL TAKE THEM MY BEALFINES THEY SHOULL TAKE THEM MY BELFINES']
+ Attacked without Transcription Loss                                                                  
+ ['THEY SHALL TAKE THEM MY EAU FIENDS THEY SHALL TAKE THEM MY BEA FRIENDS']
+ Attacked with Transcription Loss                                                                     
+ ['THEY SHOULD TAKE THEM MY BEALFINES THEY SHOULD TAKE THEM MY BEALFINES']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IT IS THEIR DAY IT IS THEIR DAY IT IS THEIR DAY']
+ Attacked without Transcription Loss                                                                  
+ ['IT A FAIR DAY IT A FAIR DAY IT A FAIR DAY']
+ Attacked with Transcription Loss                                                                     
+ ['IT IS THEIR DAY IT IS THEIR DAY IT IS THEIR DAY']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THAT BOUGHT A WONDERFUL MARRIAGE OT PLACE AND SUPPOR ON ALL THAT BOUGHT A W']
+ Attacked without Transcription Loss                                                                  
+ ['BOT BORT WONDERFUL MOLLATIF PACE AND SUPPORT OLL BOT BORT B']
+ Attacked with Transcription Loss                                                                     
+ ['THAT BROUGHT A WONDERFUL MARRIAGE OT PLACE AND SUPPLOR ON ALL THAT BOUGHT A W']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IT WAS LAUNCHED IN FEBRUARY LAST YEAR IT WAS LAUNCHED IN FEBRUARY LAST YEAR']
+ Attacked without Transcription Loss                                                                  
+ ['IT WAS LAUNCE IN FEBRUARY LAST YEAR IT WAS LAUNCE IN FEBRUARY LAST YEAR']
+ Attacked with Transcription Loss                                                                     
+ ['IT WAS LAUNCHED IN FEBRUARY LAST YEAR IT WAS LAUNCHED IN FEBRUARY LAST YEAR']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['EBRUARY THE PROBLIMS OF THE STAT EBRUARYE THE PROBLIMS OF THE STATE']
+ Attacked without Transcription Loss                                                                  
+ ['THE EVRUARE THE PROVINCE OF THE SAINT THE EVRUARE THE PROVINCE OF THE SAINT']
+ Attacked with Transcription Loss                                                                     
+ ['EBRUARY THE PROBLIMS OF THE STATE EBRUARYE THE PROBLIMS OF THE STATE']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['MC NUTHIN WAS NOT SO SURE MC NUTHIN WAS NOT SO SURE MC NUTHIN WAS NOT SO SURE']
+ Attacked without Transcription Loss                                                                  
+ ['MAC NUTHIN WAS NOT SO SURE MAC NUTHIN WAS NOT SO SURE MAC NUTHIN WAS NOT SO SURE']
+ Attacked with Transcription Loss                                                                     
+ ['MC NUTHIN WAS NOT SO SURE MC NUTHIN WAS NOT SO SURE MC NUTHIN WAS NOT SO SURE']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HE WAS  HEAD UN JIM HE WAS A AD UN JIM HEWAS A HEAD UN JIM HE WAS A HEAD UN JIM HEAS A HEAD UN JIM']
+ Attacked without Transcription Loss                                                                  
+ ["HERE'S A HED AN JIM H'S A HEAD AN JIM HERE'S A EAD AN JIM H'S A HEAD AN JIM HERE'S A EADAN JIM"]
+ Attacked with Transcription Loss                                                                     
+ ['HE AS A HEAD UN JIM HE WAS A AD UN JIM HEAS  HEAD UN JIM HE WAS A HEAD UN JIM HEAS A HEAD UN JIM']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['BEAKING FROM HIS HOSPITAL BED IN JENA HE SAID HE WAS A PEACEFUL PROTESTOR AND WAS ALSO CONSIDERING LEGUE ELECTION BEAKING FROM HIS HO']
+ Attacked without Transcription Loss                                                                  
+ ['EAKING FROM THES HOSPITAL BED IN JENI HE SAID HE WAS A PIECE OF PROTESTR AND WAS ALSO CONSIDERING LEAGUE ELECTION PEAKING FROM THES HO']
+ Attacked with Transcription Loss                                                                     
+ ['BEAKING FROM HIS HOSPITAL BED IN JENA HE SAID HE WAS A PEACEFUL PROTESTOR AND WAS ALSO CONSIDERING LEGUE ELECTION BEAKING FROM HIS HO']
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["IT'S SA VERY USEFUL REMIND TO HAVE WITED HISYU AS A ELECTOR WHI'LL ASKING PEOPLE TOYO DO"]
+ Attacked without Transcription Loss                                                                  
+ ['ITS A VERY UTHFUL REMIND TO AVOIDET ISU AS ELECTER WHILE ASKING PEOPLE TO DO']
+ Attacked with Transcription Loss                                                                     
+ ["IT'S A VERY USEFUL REMIND TO AV WITED HISYU AS ELECTOR WHI'LL ASKING PEOPLE TOYO DO"]
+ ====================================================================================================
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['WE RE ENCOURAGED BY THE NINUS WE ARE ENCOURAGED BY THE NINUS WE ARE ENCOURAGED BY']
+ Attacked without Transcription Loss                                                                  
+ ['WE RE ENCOURAGED BY THE EWS WE ARE ENCOURAGED BY THE NEWS WE ARE ENCOURAGED B']
+ Attacked with Transcription Loss                                                                     
+ ['WE RE ENCOURAGED BY THE NINUS WE ARE ENCOURAGED BY THE NINUS WE ARE ENCOURAGED BY']
+ ====================================================================================================

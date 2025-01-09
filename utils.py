@@ -82,7 +82,7 @@ def transcribe_audio(audio, processor, model,device):
     input_values = input_values.to(device)
     input_values = input_values.squeeze(0)
     input_values = input_values.squeeze(1)
-    input_values = input_values.half()  # Convert input to FP16
+    # input_values = input_values.half()  # Convert input to FP16 for training
 
     # Get the predicted logits from the model
     with torch.no_grad():
@@ -113,15 +113,49 @@ def transcribe_s2t(audio, processor, model,device):
 
     return transcription
 
-
-def get_transciption_loss(batch_text1, batch_text2):
-    from sentence_transformers import SentenceTransformer
+def get_one_transciption_sim(batch_text1, batch_text2, model):
     from sklearn.metrics.pairwise import cosine_similarity
 
     if len(batch_text1) != len(batch_text2):
         raise ValueError("Both batches must have the same number of transcriptions.")
     
-    model = SentenceTransformer('all-MiniLM-L6-v2')  # Pretrained semantic model
+
+    # Encode both batches into embeddings
+    embeddings1 = model.encode(batch_text1)
+    embeddings2 = model.encode(batch_text2)
+    
+    # Calculate pairwise similarity and compute average loss
+    # sim = cosine_similarity(embeddings1, embeddings2)
+    # return sim  # Average loss
+    # Calculate pairwise similarity and compute average loss
+    sim = [
+        cosine_similarity([emb1], [emb2])[0][0]
+        for emb1, emb2 in zip(embeddings1, embeddings2)
+    ]
+    return sum(sim) / len(sim)  # Average loss
+
+def get_one_transciption_loss(batch_text1, batch_text2, model):
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    if len(batch_text1) != len(batch_text2):
+        raise ValueError("Both batches must have the same number of transcriptions.")
+    
+
+    # Encode both batches into embeddings
+    embeddings1 = model.encode(batch_text1)
+    embeddings2 = model.encode(batch_text2)
+    
+    # Calculate pairwise similarity and compute average loss
+    loss = 1 - cosine_similarity(embeddings1, embeddings2)
+    return loss  # Average loss
+
+
+def get_transciption_loss(batch_text1, batch_text2, model):
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    if len(batch_text1) != len(batch_text2):
+        raise ValueError("Both batches must have the same number of transcriptions.")
+    
 
     # Encode both batches into embeddings
     embeddings1 = model.encode(batch_text1)

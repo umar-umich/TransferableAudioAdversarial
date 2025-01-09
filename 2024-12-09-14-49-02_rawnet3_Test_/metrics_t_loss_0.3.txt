@@ -1,0 +1,748 @@
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['MADIEU HAS ALAYS BEEN THE SAME ADIEU HAS ALWAYS BEEN']
+ Attacked without Transcription Loss                                                                  
+ ['MADIU HAS ALAYS BEEN THE SAME DIEU HAS ALWAYS BEEN']
+ Attacked with Transcription Loss                                                                     
+ ['MADIEU HAS ALAYS BEEN THE SAME ADIEU HAS ALWAYS BEEN']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GO']
+ Attacked without Transcription Loss                                                                  
+ ['THEY ARE NOT COING THEY ARE NOT COING THEY ARE NOT COING THEY ARE NOT COING THEY ARE NOT COING THEY ARE NOT COING THEY ARE NOT CO']
+ Attacked with Transcription Loss                                                                     
+ ['THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GO']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['I FEEL SORRY FOREDDYWHEN COMING IN HERE I FEEL SORRY FREDDY WON']
+ Attacked without Transcription Loss                                                                  
+ ['I FEEL SORRY FOREDDYWHEN COMING IN HERE I FEEL SORRY FOREDD ON']
+ Attacked with Transcription Loss                                                                     
+ ['I FEEL SORRY FOREDDYWHEN COMING IN HERE I FEEL SORRY FREDDY WON']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['REFERIES HAVE BEEN HANDLING THIS FOR YEARS AND WILL HAVE TO HANDLE IT FOR YEARS TO COME REFERIES HAVE BEEN HANDLING']
+ Attacked without Transcription Loss                                                                  
+ ['REFEREES HAVE BEEN HANDLING THIS FOR YEARS AND WILL HAVE TO HANDLE IT FOR YEARS TO COME REFEREES HAVE BEEN HANDLING']
+ Attacked with Transcription Loss                                                                     
+ ['REFERIES HAVE BEEN HANDLING THIS FOR YEARS AND WILL HAVE TO HANDLE IT FOR YEARS TO COME REFERIES HAVE BEEN HANDLING']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['BYALL ACCOUNTS S TOO GILMORE HAVING NEVER FELT REALLY COMFORTABLE IN THE PROFESSION']
+ Attacked without Transcription Loss                                                                  
+ ['BYALL ACCOUNTS S TOO GIMORE HAVING NEVER FELT REALLY COMFORTABLE IN THE PROFESSION']
+ Attacked with Transcription Loss                                                                     
+ ['BYALL ACCOUNTS S TOO GILMORE HAVING NEVER FELT REALLY COMFORTABLE IN THE PROFESSION']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["THAT'S THE OMY THING I WILL SAY"]
+ Attacked without Transcription Loss                                                                  
+ ["THAT'S THE ONLY THING I WILL SAY"]
+ Attacked with Transcription Loss                                                                     
+ ["THAT'S THE OMY THING I WILL SAY"]
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['GO BACK AND SINK AGAIN GO BACK AND SINK AGAIN GO BACK AND SINK AGAIN GO BACK AND SINK AGAI']
+ Attacked without Transcription Loss                                                                  
+ ['GO BACK AND TINK AGAIN GO BACK AND TINK AGAIN GO BACK AND TINK AGAIN GO BACK AND TINK AGAI']
+ Attacked with Transcription Loss                                                                     
+ ['GO BACK AND SINK AGAIN GO BACK AND SINK AGAIN GO BACK AND SINK AGAIN GO BACK AND SINK AGAI']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THINGS EN CHANGE THINS BEN CHANGE']
+ Attacked without Transcription Loss                                                                  
+ ['THINGS BAN CHANGE THINS CN CHANGE']
+ Attacked with Transcription Loss                                                                     
+ ['THINGS EN CHANGE THINS BEN CHANGE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THEDID UNDA GLORIOUS PARTNERSHIP WAS FORMED THEDID UNDA GLORIOUS PARTNERSHIP WAS FORMED']
+ Attacked without Transcription Loss                                                                  
+ ['TEDED UNDO GLORIOUS PARTNERSHIP WAS FORMED TEDED UNDO GLORIOUS PARTNERSHIP WAS FORMED']
+ Attacked with Transcription Loss                                                                     
+ ['THEDID UNDA GLORIOUS PARTNERSHIP WAS FORMED THEDID UNDA GLORIOUS PARTNERSHIP WAS FORMED']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['SO HOW DID THIS HAPPEN SO HOW DID THIS HAPPEN SO HOW DID THIS HAPPEN S HOW DID']
+ Attacked without Transcription Loss                                                                  
+ ['SOL HOW DID THIS HAPPEN SOL HOW DID THIS HAPPEN SOL HOW DID THIS HAPPEN S HOW DID']
+ Attacked with Transcription Loss                                                                     
+ ['SO HOW DID THIS HAPPEN SO HOW DID THIS HAPPEN SO HOW DID THIS HAPPEN S HOW DID']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HE DESIRES A SECOND CHANCE HE DESIRES A SECON']
+ Attacked without Transcription Loss                                                                  
+ ['HE DESIRVES A SECOND CHANCE HE DESIRVES A SECON']
+ Attacked with Transcription Loss                                                                     
+ ['HE DESIRES A SECOND CHANCE HE DESIRES A SECON']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IT WAS ST IN IOUS IT WSSAT IN PROUS IT WAS SAT IN PI']
+ Attacked without Transcription Loss                                                                  
+ ['IT WAS ST IN PIOUS IT WSSAT IN PROUS IT WAS SATIN PI']
+ Attacked with Transcription Loss                                                                     
+ ['IT WAS ST IN IOUS IT WSSAT IN PROUS IT WAS SAT IN PI']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THE SAME THINGS WILL HAPPEN WITH JEM FOOD THE SAME THINGS WILL HAPPEN WITH JM FOOD']
+ Attacked without Transcription Loss                                                                  
+ ['THE SAME THINGS WILL HAPPEN WITH EM FOOD THE SAME THINGS WILL HAPPEN WITH JIM FOOD']
+ Attacked with Transcription Loss                                                                     
+ ['THE SAME THINGS WILL HAPPEN WITH JEM FOOD THE SAME THINGS WILL HAPPEN WITH JM FOOD']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THE WOTHER FOR A CLASS IS ENDURED THE WO']
+ Attacked without Transcription Loss                                                                  
+ ['THE WOTHER FOR A CLESSE IS ENDURED THE WO']
+ Attacked with Transcription Loss                                                                     
+ ['THE WOTHER FOR A CLASS IS ENDURED THE WO']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['E IS TOO READY TO SPECTULATE E IS TOO READY TO SPECTULATE']
+ Attacked without Transcription Loss                                                                  
+ ['HE IS TOO READY TO SPECULATE HE IS TOO READY TO SPECULATE']
+ Attacked with Transcription Loss                                                                     
+ ['E IS TOO READY TO SPECTULATE E IS TOO READY TO SPECTULATE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['WE COULD LOAN A LOT RO EM WE COULD LOAN LOT PROM EM WE COULD LOAN A LT PROM M WE COULD LN A LO']
+ Attacked without Transcription Loss                                                                  
+ ['WE COULD LEAN A LOT PROM E WE COULD LEAN LOT PROMEM WE COULD LEAN A LOT ROM M WE COULD LN A LO']
+ Attacked with Transcription Loss                                                                     
+ ['WE COULD LOAN A LOT RO EM WE COULD LOAN LOT PROM EM WE COULD LOAN A LT PROM M WE COULD LN A LO']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HE ALSO LAUCED UNHER STRAGEDY FETHER AGENCY HE ALSO LDG']
+ Attacked without Transcription Loss                                                                  
+ ['HE ALSO LAGED UNHER TRAGEDY FEATHER AGENCY HE ALSO LDG']
+ Attacked with Transcription Loss                                                                     
+ ['HE ALSO LAUCED UNHER STRAGEDY FETHER AGENCY HE ALSO LDG']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['CRISHLY THOUGH UNITED WERE STILL ALIVE CRISHLY THOUGH']
+ Attacked without Transcription Loss                                                                  
+ ['KRISHLY THOUGH UNITED WERE STILL ALIVE KRISHLY THOUGH']
+ Attacked with Transcription Loss                                                                     
+ ['CRISHLY THOUGH UNITED WERE STILL ALIVE CRISHLY THOUGH']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['BUT WE FINISHE THE SOUL BUT WE FINSHED THE SOUL BUT WE']
+ Attacked without Transcription Loss                                                                  
+ ['BUT WE FINSHE THE SHOUL BUT WE FINISHED THE SHOUL BUT WE']
+ Attacked with Transcription Loss                                                                     
+ ['BUT WE FINISHE THE SOUL BUT WE FINSHED THE SOUL BUT WE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['WELL THIS CERTAINLY MAKES THESE VERYDICTIONS LOOK VERY SIOLY WELL THIS CERTAINLY MAKE']
+ Attacked without Transcription Loss                                                                  
+ ['WELL THIS CERTAINLY MAKES THESE VERDICTIONS LOOK VERY SOOLY WELL THIS CERTAINLY MAKE']
+ Attacked with Transcription Loss                                                                     
+ ['WELL THIS CERTAINLY MAKES THESE VERYDICTIONS LOOK VERY SIOLY WELL THIS CERTAINLY MAKE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS']
+ Attacked without Transcription Loss                                                                  
+ ['I WOULD LIKE TO STAY WITH RINGERS I WOULD LIKE TO STAY WITH RINGERS I WOULD LIKE TO STAY WITH RINGERS I WOULD LIKE TO STAY WITH RINGERS']
+ Attacked with Transcription Loss                                                                     
+ ['I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["MIND YOU FWE WOULDN'T MIND YOU FWE WOULDN'T MIND YOU FWE WOULDN'T"]
+ Attacked without Transcription Loss                                                                  
+ ["MIND YOU WE WOULDN'T MIND YOU WE WOULDN'T MIND YOU WE WOULDN'T"]
+ Attacked with Transcription Loss                                                                     
+ ["MIND YOU FWE WOULDN'T MIND YOU FWE WOULDN'T MIND YOU FWE WOULDN'T"]
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THE COAL WAS IGNORED THE COL WAS IGNORED']
+ Attacked without Transcription Loss                                                                  
+ ['THE COLL WAS IGNORED THE COLL WAS IGNORED']
+ Attacked with Transcription Loss                                                                     
+ ['THE COAL WAS IGNORED THE COL WAS IGNORED']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HIS BESS FRIEND FLODEN BRIGE HI BES FREND FLORDEN BRIGE']
+ Attacked without Transcription Loss                                                                  
+ ['HIS ESS FRIED FLODEN BRIDE HI BES FREND FLORDEN BRIDE']
+ Attacked with Transcription Loss                                                                     
+ ['HIS BESS FRIEND FLODEN BRIGE HI BES FREND FLORDEN BRIGE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IN ESSENCE THE TEACHING PROFESSION HAS A THOICE IN ESSENCE THE TEACHING PROFESSION HAS A THOICE']
+ Attacked without Transcription Loss                                                                  
+ ['IN ESSENCE THE TEACHING PROFESSION HAS A CHOICE IN ESSENCE THE TEACHING PROFESSION HAS A CHOICE']
+ Attacked with Transcription Loss                                                                     
+ ['IN ESSENCE THE TEACHING PROFESSION HAS A THOICE IN ESSENCE THE TEACHING PROFESSION HAS A THOICE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['SOM FROM THE OTHER PLAYERS WAS SUPER E SOUCH FROM THE OTHER PLAYERS WA']
+ Attacked without Transcription Loss                                                                  
+ ['TSOM FROM THE OTHER PLAYERS WAS SUPER E SOUSH FROM THE OTHER PLAYERS WA']
+ Attacked with Transcription Loss                                                                     
+ ['SOM FROM THE OTHER PLAYERS WAS SUPER E SOUCH FROM THE OTHER PLAYERS WA']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HE CAME BACK WITH TWO MEMBERS OF STAFF AND THEIR ATTITUDE WAS SO WHAT HE CAME BACK WITH TWO MEMBERS OF STAFF']
+ Attacked without Transcription Loss                                                                  
+ ['HE CAME BACK WITH TWO MEMBERS OF STEFF AND THEIR ATTITUDE WAS SO WHAT HE CAME BACK WITH TWO MEMBERS OF STEFF']
+ Attacked with Transcription Loss                                                                     
+ ['HE CAME BACK WITH TWO MEMBERS OF STAFF AND THEIR ATTITUDE WAS SO WHAT HE CAME BACK WITH TWO MEMBERS OF STAFF']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IT WO FETS MAWACK IT WO FETS MAWACK']
+ Attacked without Transcription Loss                                                                  
+ ['IT WO TFETS AWACK IT WO TETS AWACK']
+ Attacked with Transcription Loss                                                                     
+ ['IT WO FETS MAWACK IT WO FETS MAWACK']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THE PEOPLE AROUND ME WHEN A ANTOSS TAY THE PEOPLE AROUND ME WHEN A ANTOSS TAY']
+ Attacked without Transcription Loss                                                                  
+ ['THE PEOPLE AROUND ME WHEN A FANTOSS STAY THE PEOPLE AROUND ME WHEN A FANTOSTAY']
+ Attacked with Transcription Loss                                                                     
+ ['THE PEOPLE AROUND ME WHEN A ANTOSS TAY THE PEOPLE AROUND ME WHEN A ANTOSS TAY']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['TO TIME MAY NEVER BE BROKEN TOR TIME MAY NVER BE BROKEN']
+ Attacked without Transcription Loss                                                                  
+ ['FOU TIME MAY NEVER BE BROKEN FOUR TIME MAY NVER BE BROKEN']
+ Attacked with Transcription Loss                                                                     
+ ['TO TIME MAY NEVER BE BROKEN TOR TIME MAY NVER BE BROKEN']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THERE IS NO OLPINESS THERE IS NO OLPINESS THERE IS NO OLPINESS THERE IS NO OLPINESS THERE IS NO']
+ Attacked without Transcription Loss                                                                  
+ ['THERE IS NO OPINNESS THERE IS NO OPINNESS THERE IS NO OPINNESS THERE IS NO OPINNESS THERE IS NO']
+ Attacked with Transcription Loss                                                                     
+ ['THERE IS NO OLPINESS THERE IS NO OLPINESS THERE IS NO OLPINESS THERE IS NO OLPINESS THERE IS NO']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["RATHERNE'S A EASY TRILENCE RATHERENE'S A EASY IE"]
+ Attacked without Transcription Loss                                                                  
+ ["RATHARNE'S A EASY TRILENCE RATHARENE'S A EASY IE"]
+ Attacked with Transcription Loss                                                                     
+ ["RATHERNE'S A EASY TRILENCE RATHERENE'S A EASY IE"]
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['BUT WI TOOK THEM SO LONG BUT WI TOOK THEM SO LONG']
+ Attacked without Transcription Loss                                                                  
+ ['BUT WHI TOOK THEM SO LONG BUT WHY TOOK THEM SO LONG']
+ Attacked with Transcription Loss                                                                     
+ ['BUT WI TOOK THEM SO LONG BUT WI TOOK THEM SO LONG']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HECON PREDICH']
+ Attacked without Transcription Loss                                                                  
+ ['HECON TREDECH']
+ Attacked with Transcription Loss                                                                     
+ ['HECON PREDICH']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['BRAON IS AN INTERESTING MAN BUT HE IS NOT DESPERATE BRARON IS AN INTERESTING MAN']
+ Attacked without Transcription Loss                                                                  
+ ['BRON IS AN INTERESTING MAN BUT HE IS NOT DESPERATE BRORN IS AN INTERESTING MAN']
+ Attacked with Transcription Loss                                                                     
+ ['BRAON IS AN INTERESTING MAN BUT HE IS NOT DESPERATE BRARON IS AN INTERESTING MAN']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THE WORGFOR SYLUMSECAS IS ALSO DESIGNED TO BENEFIT EVERYONE IN THE COMMUNITIES IN WHICH THEY LIVE THE WORGFOR SYLEMCECAS I']
+ Attacked without Transcription Loss                                                                  
+ ['THE WEGFOR SYLUMSECAS IS ALSO DESIGNED TO BENEFIT EVERYONE IN THE COMMUNITIES IN WHICH THEY LIVE THE WEGFOR SYLUMSECAS I']
+ Attacked with Transcription Loss                                                                     
+ ['THE WORGFOR SYLUMSECAS IS ALSO DESIGNED TO BENEFIT EVERYONE IN THE COMMUNITIES IN WHICH THEY LIVE THE WORGFOR SYLEMCECAS I']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['WHAT OES LTREAD WHAT DOS ALTEAD']
+ Attacked without Transcription Loss                                                                  
+ ['WHAT OES LLTRAT WHAT DOES ALTREAT']
+ Attacked with Transcription Loss                                                                     
+ ['WHAT OES LTREAD WHAT DOS ALTEAD']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IT MIGHT BE OCUED IT MIGH BE OCUED IT MIGHT BE OCUED IT MIGHT BE OCUED IT MGHT BE OCUED IT MIGHT BE']
+ Attacked without Transcription Loss                                                                  
+ ['IT MIGHT BE OCHEED IT MIGH BE OCHED IT MIGHT BE OCHEED IT MIGH BE OCHEED IT MIHT BE OCHEED IT MIGHT BE']
+ Attacked with Transcription Loss                                                                     
+ ['IT MIGHT BE OCUED IT MIGH BE OCUED IT MIGHT BE OCUED IT MIGHT BE OCUED IT MGHT BE OCUED IT MIGHT BE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IAM IN THE POSITION IAM IN THE POSITION']
+ Attacked without Transcription Loss                                                                  
+ ['DIAM IN THE POSITION DIAM IN THE POSITION']
+ Attacked with Transcription Loss                                                                     
+ ['IAM IN THE POSITION IAM IN THE POSITION']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['FAIR LESEM FAIRLYSEM FARLYSEM FAIR LYSEM FAIR LYSAM FAIR LYSAM FAIR LYS']
+ Attacked without Transcription Loss                                                                  
+ ['FAIR LISAM FAIRLISAM FAIRLISAM AIR LISAM FAIR LISAM FAIR LISAM FAIR LIS']
+ Attacked with Transcription Loss                                                                     
+ ['FAIR LESEM FAIRLYSEM FARLYSEM FAIR LYSEM FAIR LYSAM FAIR LYSAM FAIR LYS']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THE CATHALATIES WERE NOT NAMED THE CATHIALATIES WERE NOT NAMED THE CATHIALATIES WERE NOT NAMED THE CATHIALA']
+ Attacked without Transcription Loss                                                                  
+ ['THE CATIALATIES WERE NOT NAMED THE CATIALATIES WERE NOT NAMED THE CATIALATIES WERE NOT NAMED THE CATIALA']
+ Attacked with Transcription Loss                                                                     
+ ['THE CATHALATIES WERE NOT NAMED THE CATHIALATIES WERE NOT NAMED THE CATHIALATIES WERE NOT NAMED THE CATHIALA']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HO HAD FN IT PLACE ABOT THE FERDICT WHO HAD FUND IT PLACE ABOUT THE FERDICT WHO HAD OD LAE BOUT THE ERDICT WHO H']
+ Attacked without Transcription Loss                                                                  
+ ['HO HAD FND IT PLACE ABOT THE VERDICT WHO HAD FUN IT PLACE ABOUT THE VERDICT WHO HAD OD LAE BOUT THE ERDICT WHO H']
+ Attacked with Transcription Loss                                                                     
+ ['HO HAD FN IT PLACE ABOT THE FERDICT WHO HAD FUND IT PLACE ABOUT THE FERDICT WHO HAD OD LAE BOUT THE ERDICT WHO H']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THEY HAVE TAKEN THE PIE AWAY FROM THE TABLEAUD PRESS THE LAWERS AND E CENCENCE AND PUT IT BACK ON THE HANDS OF THE ARTISTS THEY HAVE TAKEN THE PIE A']
+ Attacked without Transcription Loss                                                                  
+ ['THEY HAVE TAKEN THE PIER AWEY FROM THE TABLEAUD PRESS THE LAWYERS AND E CENCENCE AND PUT IT BACK ON THE HANDS OF THE ARTISTS THEY HAVE TAKEN THE PIER A']
+ Attacked with Transcription Loss                                                                     
+ ['THEY HAVE TAKEN THE PIE AWAY FROM THE TABLEAUD PRESS THE LAWERS AND E CENCENCE AND PUT IT BACK ON THE HANDS OF THE ARTISTS THEY HAVE TAKEN THE PIE A']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['WE NEVER PLAYED A SALL WE NEVER PLAYED A SALL']
+ Attacked without Transcription Loss                                                                  
+ ['WE NEVER PLAYED ASALL WE NEVER PLAYED ASALL']
+ Attacked with Transcription Loss                                                                     
+ ['WE NEVER PLAYED A SALL WE NEVER PLAYED A SALL']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['I GOT A YELOBA ARD I GOT A YELOBA CARD I GOT A YELOBA CARD I GOT A YELOBA CARD I']
+ Attacked without Transcription Loss                                                                  
+ ['I GOT A YELLOBA CARD I GOT A YELLOBA CARD I GOT A YELLOBA CARD I GOT A YELLOBA CARD I']
+ Attacked with Transcription Loss                                                                     
+ ['I GOT A YELOBA ARD I GOT A YELOBA CARD I GOT A YELOBA CARD I GOT A YELOBA CARD I']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['I CA BE THE SULMON ALOVED I CAN BE THE SULMON ALOED  CAN B']
+ Attacked without Transcription Loss                                                                  
+ ['I CA BE THE SUMON ALOVED I CAN BE THE SUMON ALOED  CAN B']
+ Attacked with Transcription Loss                                                                     
+ ['I CA BE THE SULMON ALOVED I CAN BE THE SULMON ALOED  CAN B']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HE IS STOOD ON SHOCK HE IS STOOD ON SHOCK HE IS STOOD ON SHOCK']
+ Attacked without Transcription Loss                                                                  
+ ['HER IS STODON SHOCK HER IS STODON SHOCK HER IS STODON SHOCK']
+ Attacked with Transcription Loss                                                                     
+ ['HE IS STOOD ON SHOCK HE IS STOOD ON SHOCK HE IS STOOD ON SHOCK']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THE SAME GINE IS ARE OFTEN MISSING ALTOGETHER FROM THE TUMOISELS OF PEOPLE WITH LELCANCE THE SAME GINE IS ARE']
+ Attacked without Transcription Loss                                                                  
+ ['THE SAME GENE IS ARE OFTEN MISSING ALTOGETHER FROM THE TUMOISELS OF PEOPLE WITH LELCANCE THE SAME GENE IS ARE']
+ Attacked with Transcription Loss                                                                     
+ ['THE SAME GINE IS ARE OFTEN MISSING ALTOGETHER FROM THE TUMOISELS OF PEOPLE WITH LELCANCE THE SAME GINE IS ARE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['INSTACISIONS ARE FULSE INSTACISIONS ARE FULSE']
+ Attacked without Transcription Loss                                                                  
+ ['INSTACITIONS ARE FULSE INSTACITIONS ARE FULSE']
+ Attacked with Transcription Loss                                                                     
+ ['INSTACISIONS ARE FULSE INSTACISIONS ARE FULSE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HE SHOULD HAVE BEEN WATCHING EVERY P AND CUBE HE SHOULD HAVE BEEN WATCHING EVERY P AND CUBE HE SHOULD HAVE BEEN WATCHING E']
+ Attacked without Transcription Loss                                                                  
+ ['HE SHOULD HAVE BEEN WATCHING EVERY P AND CUE HE SHOULD HAVE BEEN WATCHING EVERY P AND CUE HE SHOULD HAVE BEEN WATCHING E']
+ Attacked with Transcription Loss                                                                     
+ ['HE SHOULD HAVE BEEN WATCHING EVERY P AND CUBE HE SHOULD HAVE BEEN WATCHING EVERY P AND CUBE HE SHOULD HAVE BEEN WATCHING E']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['PEOPLE ASK ABOUT THE CONS OF TOVATIM PEOPLE ASK ABOUT THE CONS OF TOVATIM PEOPLE ASK ABOUT THE CO']
+ Attacked without Transcription Loss                                                                  
+ ['PEOPLE ASK ABOUT THE CONSEFTOF ATEM PEOPLE ASK ABOUT THE CONSEFT OF ATEM PEOPLE ASK ABOUT THE CO']
+ Attacked with Transcription Loss                                                                     
+ ['PEOPLE ASK ABOUT THE CONS OF TOVATIM PEOPLE ASK ABOUT THE CONS OF TOVATIM PEOPLE ASK ABOUT THE CO']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["IT'S ONLY IR IT'S ONLY FAIR"]
+ Attacked without Transcription Loss                                                                  
+ ["IT'S ONLY AIR IT'S ONLY FAIR"]
+ Attacked with Transcription Loss                                                                     
+ ["IT'S ONLY IR IT'S ONLY FAIR"]
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['FROM OUR POINT OF VIEW THE PLAREN IS FREE TO LEAVE FROM OUR POINT OF VIEW']
+ Attacked without Transcription Loss                                                                  
+ ['FROM OUR POINT OF VIEW THE BLAREN IS FREE TO LEAVE FROM OUR POINT OF VIEW']
+ Attacked with Transcription Loss                                                                     
+ ['FROM OUR POINT OF VIEW THE PLAREN IS FREE TO LEAVE FROM OUR POINT OF VIEW']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['WE ARE VERY PLEASED THAT THEY HAVE BEEN ABLE TO VISIT THE BASE AND HOPE THEY ENJOYED THEIR DAY WE ARE VER']
+ Attacked without Transcription Loss                                                                  
+ ['WE ARE VERY PLEASED THAT THEY HAVE BEEN ABLE TO VISIT THE BASS AND HOPE THEY ENJOYED THEIR DAY WE ARE VER']
+ Attacked with Transcription Loss                                                                     
+ ['WE ARE VERY PLEASED THAT THEY HAVE BEEN ABLE TO VISIT THE BASE AND HOPE THEY ENJOYED THEIR DAY WE ARE VER']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['BUTLY FERISH THE SHIDE BUTLY FERISH THE SHIDE BUTLY FERISH THE SHIDE']
+ Attacked without Transcription Loss                                                                  
+ ['BUT LE FENSHED THE SHIDE BUT LE FENISHED THE SHIDE BUT LE FENISHED THE SHIDE']
+ Attacked with Transcription Loss                                                                     
+ ['BUTLY FERISH THE SHIDE BUTLY FERISH THE SHIDE BUTLY FERISH THE SHIDE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['ISELL WHITINLIST ISEL WHITINLIST']
+ Attacked without Transcription Loss                                                                  
+ ['ISELL WHITONLIST ISELL WHITONLIST']
+ Attacked with Transcription Loss                                                                     
+ ['ISELL WHITINLIST ISEL WHITINLIST']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HE WAS THEN REPLACED BY ROSS HE WAS']
+ Attacked without Transcription Loss                                                                  
+ ['HE WAS THEN REPLACED BY ROS HE WAS']
+ Attacked with Transcription Loss                                                                     
+ ['HE WAS THEN REPLACED BY ROSS HE WAS']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["BUT OF COURSE THEY DON' BUT OF COURSE THEY DON'T BT F COURSE THEY DON'T BUT OF CORSE THEY DON'T BU O"]
+ Attacked without Transcription Loss                                                                  
+ ["BUT OF COURSE THEY DON' BU OF COURSE THEY DON'T BAT F COURSE THEY DON'T BAT OF CORSE THEY DON'T B O"]
+ Attacked with Transcription Loss                                                                     
+ ["BUT OF COURSE THEY DON' BUT OF COURSE THEY DON'T BT F COURSE THEY DON'T BUT OF CORSE THEY DON'T BU O"]
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["VAT'S NO CONVICTION BECAUSE HEIS NOT TENANT VAT'S NO CONVICTION"]
+ Attacked without Transcription Loss                                                                  
+ ["THAT'S NO CONVICTION BECAUSE HEIS NOT ATENENT THAT'S NO CONVICTION"]
+ Attacked with Transcription Loss                                                                     
+ ["VAT'S NO CONVICTION BECAUSE HEIS NOT TENANT VAT'S NO CONVICTION"]
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THIS FORGIVE SQUALA DRAND EIGHT MEMBERS THIS FORGIVE SQUALA DUR']
+ Attacked without Transcription Loss                                                                  
+ ['THIS FOL GIVE SQUALAN DRAND EIGHT MEMBERS THIS FOL GIVE SQUALAN DUR']
+ Attacked with Transcription Loss                                                                     
+ ['THIS FORGIVE SQUALA DRAND EIGHT MEMBERS THIS FORGIVE SQUALA DUR']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THE COPERITE COMMUNITY IS INTERESTED THE COPERITE COMMUNITY IS INTERESTED THE COPERITE COMMUNITY IS INTERESTED TH']
+ Attacked without Transcription Loss                                                                  
+ ['THE COLPERITE COMMUNITY IS INTERESTED THE COLPERITE COMMUNITY IS INTERESTED THE COLPERITE COMMUNITY IS INTERESTED TH']
+ Attacked with Transcription Loss                                                                     
+ ['THE COPERITE COMMUNITY IS INTERESTED THE COPERITE COMMUNITY IS INTERESTED THE COPERITE COMMUNITY IS INTERESTED TH']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['BE ALSO HAS A HOUSE IN ITALY BE ALSO HAS A HOUSE IN ITALY BE ALSO HAS A HOUSE IN ITALY BE ALSO HAS']
+ Attacked without Transcription Loss                                                                  
+ ['BEALSO HAS A HOUSE IN ITALY BEALSO HAS A HOUSE IN ITALY BEALSO HAS A HOUSE IN ITALY BEALSO HAS']
+ Attacked with Transcription Loss                                                                     
+ ['BE ALSO HAS A HOUSE IN ITALY BE ALSO HAS A HOUSE IN ITALY BE ALSO HAS A HOUSE IN ITALY BE ALSO HAS']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['YOU CAN TELL BY THE RESULTS AT ALL LEVELS OF RUGGBY THAT THE HOME DRAWER IS VITAL YOU CAN TELL BY THE RESULT']
+ Attacked without Transcription Loss                                                                  
+ ['YOU CAN TELL BY THE RESULTS AT ALL LEVELS OF RUGBY THAT THE HOME DRAWER IS VITAL YOU CAN TELL BY THE RESULT']
+ Attacked with Transcription Loss                                                                     
+ ['YOU CAN TELL BY THE RESULTS AT ALL LEVELS OF RUGGBY THAT THE HOME DRAWER IS VITAL YOU CAN TELL BY THE RESULT']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IT WAS SHE IT S SHE IT WA SHE']
+ Attacked without Transcription Loss                                                                  
+ ['HIT WS SHE HIT AS SHE HI WA SHE']
+ Attacked with Transcription Loss                                                                     
+ ['IT WAS SHE IT S SHE IT WA SHE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THAT WAS A GREAT PUFFOOLANCE BY THE TEAME THAT WAS A GREAT PUFFOOLANCE BY THE TEAME']
+ Attacked without Transcription Loss                                                                  
+ ['THAT WAS A GREAT PURFOOLANCE BY THE TAME THAT WAS A GREAT PURFOOLANCE BY THE TEAME']
+ Attacked with Transcription Loss                                                                     
+ ['THAT WAS A GREAT PUFFOOLANCE BY THE TAME THAT WAS A GREAT PUFFOOLANCE BY THE TEAME']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IT IS NOW ALL ABOUT TRYING TO KEEP A HAD IT IS NOW ALL ABOUT TRYING TO KEEP A HAD IT IS NOW ALL ABOUT TR']
+ Attacked without Transcription Loss                                                                  
+ ['IT IS NOW ALL ABOUT TRYING TO KEEP A HAT IT IS NOW ALL ABOUT TRYING TO KEEP A HAT IT IS NOW ALL ABOUT TR']
+ Attacked with Transcription Loss                                                                     
+ ['IT IS NOW ALL ABOUT TRYING TO KEEP A HAD IT IS NOW ALL ABOUT TRYING TO KEEP A HAD IT IS NOW ALL ABOUT TR']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IM GLAD YOU HAVE CAUGHT YUR PACKING DANE AAM GLAD YOU HA CAGH YOR PACKING DANE AM GLAD YOU HAVE AUGHT YOUR PACKING DANE']
+ Attacked without Transcription Loss                                                                  
+ ['IM GLAD YOU HAVE CAUGHT YUR PACKING DANI AAM GLAD YOU HA CAGH YOR PACKING DANI AM GLAD YOU HAVE AUGHT YOUR PACKING DANI']
+ Attacked with Transcription Loss                                                                     
+ ['IM GLAD YOU HAVE CAUGHT YUR PACKING DANE AAM GLAD YOU HA CAGH YOR PACKING DANE AM GLAD YOU HAVE AUGHT YOUR PACKING DANE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['WHO ALL DUIS WHO ALL DUIS']
+ Attacked without Transcription Loss                                                                  
+ ['WHO ALL DOIS WHO ALL DOIS']
+ Attacked with Transcription Loss                                                                     
+ ['WHO ALL DUIS WHO ALL DUIS']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["SDANS MUSHE FRND STRAIGHTFORWARD ADH'S MCHS FURNAND STRAIGHTFORWARD"]
+ Attacked without Transcription Loss                                                                  
+ ["SADANS URHE FRNND STRAIGHTFORARD DH'S MCHES FURAND STRAIGHTFORWARD"]
+ Attacked with Transcription Loss                                                                     
+ ["SDANS MUSHE FRND STRAIGHTFORWARD ADH'S MCHS FURNAND STRAIGHTFORWARD"]
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["HE'S TED HERE BEFORE HE'S HED HERE BEORE"]
+ Attacked without Transcription Loss                                                                  
+ ["HE'S DED HERE BEFORE HE'S ED HERE BEFORE"]
+ Attacked with Transcription Loss                                                                     
+ ["HE'S TED HERE BEFORE HE'S HED HERE BEORE"]
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['WEAVING A SHOCK WEAVING A SHOCK WEAVING A SHOCK']
+ Attacked without Transcription Loss                                                                  
+ ['WEARING A SHOCK WEARING A SHOCK WEARING A SHOCK']
+ Attacked with Transcription Loss                                                                     
+ ['WEAVING A SHOCK WEAVING A SHOCK WEAVING A SHOCK']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['AN IM TO GET THERE WE HAVE GOT TO INVEST AN IMS TO GET THERE WE HA']
+ Attacked without Transcription Loss                                                                  
+ ['AN M TO GET THERE WE HAVE GOT TO INVEST AN IRMS TO GET THERE WE HA']
+ Attacked with Transcription Loss                                                                     
+ ['AN IM TO GET THERE WE HAVE GOT TO INVEST AN IMS TO GET THERE WE HA']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['HE SHOULD EMERGE ASA WIOW HE SHOULD EMERE S WIDW HE SHOULD EMRGE AS']
+ Attacked without Transcription Loss                                                                  
+ ['HE SHOULD EMERGE AS A WIDOW HE SHOULD EMER S WIDW HE SHOULD EMGE AS']
+ Attacked with Transcription Loss                                                                     
+ ['HE SHOULD EMERGE ASA WIOW HE SHOULD EMERE S WIDW HE SHOULD EMRGE AS']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['IN OURLAST GAME WE DID NOT DO THAT IN OUR LAST GAME WE DID NOT DO THAT IN OUR LAST GAME WE']
+ Attacked without Transcription Loss                                                                  
+ ['IN OU LAST GAME WE DID NOT DO THAT IN OU LAST GAME WE DID NOT DO THAT IN OU LAST GAME WE']
+ Attacked with Transcription Loss                                                                     
+ ['IN OURLAST GAME WE DID NOT DO THAT IN OUR LAST GAME WE DID NOT DO THAT IN OUR LAST GAME WE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['TAT MAYABEE CRIED FOR HELP TAT MAYAVBEE CRIED FOR HELP']
+ Attacked without Transcription Loss                                                                  
+ ['TAT MAYHAVE BEENY CRIED FOR HELP TAT MAYHAVE BEENE CRIED FOR HELP']
+ Attacked with Transcription Loss                                                                     
+ ['TAT MAYABEE CRIED FOR HELP TAT MAYAVBEE CRIED FOR HELP']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['METLY YOU HAVE TO BE TOL METALLY YOU HAVE TO BE TOLF MENTAL']
+ Attacked without Transcription Loss                                                                  
+ ['MERALY YOU HAVE TO BE TOL MERALLY YOU HAVE TO BE TOLF MERAL']
+ Attacked with Transcription Loss                                                                     
+ ['METLY YOU HAVE TO BE TOL METALLY YOU HAVE TO BE TOLF MENTAL']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["THAT'S THE BAB MAPSOM THAT'S THE BABE MAPSOM THA'S THE BABE MAPSO"]
+ Attacked without Transcription Loss                                                                  
+ ["THAT'S THE BAB NAPSOM THAT'S THE BABE NAPSOM THA'S THE BABE NAPSO"]
+ Attacked with Transcription Loss                                                                     
+ ["THAT'S THE BAB MAPSOM THAT'S THE BABE MAPSOM THA'S THE BABE MAPSO"]
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["WERE IN SHOCK WE'RE IN SHOCK WE'RE IN SHOC WE'RE IN SHOC WE'RE IN SHOCK WERE IN SHOCK WERE IN SHOCK WERE IN SHO"]
+ Attacked without Transcription Loss                                                                  
+ ["WE'RE IN SHO WE'RE IN SHO WE'RE IN SHO WE'RE IN SHO WE'RE IN SHOK WERE IN SHOK WERE IN SHOK WERE IN SHO"]
+ Attacked with Transcription Loss                                                                     
+ ["WERE IN SHOCK WE'RE IN SHOCK WE'RE IN SHOC WE'RE IN SHOC WE'RE IN SHOCK WERE IN SHOCK WERE IN SHOCK WERE IN SHO"]
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["WE'VE ALWAYS HAD THREE APTIONS AND NONE OF THEM ARE PERFECT WE'VE ALWAYS HAD THREE APTIONS"]
+ Attacked without Transcription Loss                                                                  
+ ["WE'VE ALWAYS HAD THREE OPTIONS AND NONE OF THEM ARE PERFECT WE'VE ALWAYS HAD THREE OPTIONS"]
+ Attacked with Transcription Loss                                                                     
+ ["WE'VE ALWAYS HAD THREE APTIONS AND NONE OF THEM ARE PERFECT WE'VE ALWAYS HAD THREE APTIONS"]
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THREE OUT OF FOUR OF THE WRIDERS HAVE NEVER BEEN COMMISSIONED BEFORE THREE OUT OF FOUR OF THE WRIDERS HAVE NE']
+ Attacked without Transcription Loss                                                                  
+ ['THREE OUT OF FOUR OF THE RIDERS HAVE NEVER BEEN COMMISSIONED BEFORE THREE OUT OF FOUR OF THE RIDERS HAVE NE']
+ Attacked with Transcription Loss                                                                     
+ ['THREE OUT OF FOUR OF THE WRIDERS HAVE NEVER BEEN COMMISSIONED BEFORE THREE OUT OF FOUR OF THE WRIDERS HAVE NE']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['WE LOT SEE THE FAILO OF PARSACK WE O']
+ Attacked without Transcription Loss                                                                  
+ ['WE LOT SEE THE FAILO OF PARSOCK WE']
+ Attacked with Transcription Loss                                                                     
+ ['WE LOT SEE THE FAILO OF PARSACK WE O']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['SAMES I SENT IBULCOMPRNMAZ SAMES I SENT IBULCOMPRNMAZ SAMES I SENT IBULCOMPRMAZ']
+ Attacked without Transcription Loss                                                                  
+ ['SAMES I SENT BULCOMPRNMAZ SAMES I SENT BULCOMPRNMAZ SAMES I SENT BULCOMPRMAZ']
+ Attacked with Transcription Loss                                                                     
+ ['SAMES I SENT IBULCOMPRNMAZ SAMES I SENT IBULCOMPRNMAZ SAMES I SENT IBULCOMPRMAZ']
+ =============================================================================================================================================================================================================
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["HE DIDN'T LT ME DOWN HE DIDN' LET ME DWN"]
+ Attacked without Transcription Loss                                                                  
+ ["HE DIDN'T LT ME DOW HE DIDN' LET ME WN"]
+ Attacked with Transcription Loss                                                                     
+ ["HE DIDN'T LT ME DOWN HE DIDN' LET ME DWN"]
+ =============================================================================================================================================================================================================

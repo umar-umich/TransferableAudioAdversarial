@@ -7,32 +7,38 @@ import csv
 
 
 class DATAReader(data.Dataset):
-    def __init__(self, args=None, split=None, labels=None):
-        self.args = args
-        if split in 'TRAIN':
+    def __init__(self, split=None, labels=None):
+        # self.data_root = data_root
+        self.split = split
+        if self.split in 'TRAIN':
             # load corresponding labels
-            train_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trn.txt'
+            train_labels_file = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trn.txt'
             labels = get_labels(train_labels_file)
-            args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_train/flac'
-        elif split in 'TEST':
-            test_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt'
+            self.data_root = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_train/flac'
+        elif self.split in 'TEST':
+            test_labels_file = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt'
             labels = get_labels(test_labels_file)
-            args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_eval/flac'
+            self.data_root = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_eval/flac'
                     # self.split = split
-        elif split in 'DEV':
-            dev_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.dev.trl.txt'
+        elif self.split in 'DEV':
+            dev_labels_file = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.dev.trl.txt'
             labels = get_labels(dev_labels_file)
-            args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_dev/flac'
-        elif split in 'In_The_Wild':
-            dev_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/release_in_the_wild/meta.csv'
+            self.data_root = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_dev/flac'
+        elif self.split in 'In_The_Wild':
+            dev_labels_file = '/data/Umar/A_Datasets/release_in_the_wild/meta.csv'
             labels = get_in_the_wild_labels(dev_labels_file)
-            args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/release_in_the_wild'
+            self.data_root = '/data/Umar/A_Datasets/release_in_the_wild'
+        elif self.split in 'WaveFake':
+            # dev_labels_file = '/data/Umar/A_Datasets/release_in_the_wild/meta.csv'
+            # labels = get_in_the_wild_labels(dev_labels_file)
+            self.data_root = '/data/Umar/A_Datasets/WaveFake/ljspeech_hifiGAN'
+            
 
         self.labels = labels  # Provided labels for real/fake classification
 
         # List real and fake files
-        self.real_files = self.list_files(args, label=0)  # 0 for real
-        self.fake_files = self.list_files(args, label=1)  # 1 for fake
+        self.real_files = self.list_files(label=0)  # 0 for real
+        self.fake_files = self.list_files(label=1)  # 1 for fake
 
         print(f"{split}, Real files: {len(self.real_files)}, Fake files: {len(self.fake_files)}")
 
@@ -63,9 +69,9 @@ class DATAReader(data.Dataset):
 
         return real_data, real_label, fake_data, fake_label
 
-    def list_files(self, args, label):
+    def list_files(self, label):
         file_list = []
-        dataset_path = self.args.data_root  # Assuming split is 'TRAIN' or 'TEST'
+        dataset_path = self.data_root  # Assuming split is 'TRAIN' or 'TEST'
 
         for file_name in os.listdir(dataset_path):
             if file_name.endswith('.flac') or file_name.endswith('.wav'):  # Audio files of interest
@@ -135,7 +141,7 @@ def pad(x, max_len=64600):
 
 
 if __name__ == '__main__':
-    dev_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/release_in_the_wild/meta.csv'
+    dev_labels_file = '/data/Umar/A_Datasets/release_in_the_wild/meta.csv'
     labels = get_in_the_wild_labels(dev_labels_file)
     print(labels)
 

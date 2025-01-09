@@ -1,0 +1,66 @@
+
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GO']
+ Attacked without Transcription Loss                                                                  
+ ['THEY ARE NOT COING THEY ARE NOT COING THEY ARE NOT COING THEY ARE NOT COING THEY ARE NOT COING THEY ARE NOT COING THEY ARE NOT CO']
+ Attacked with Transcription Loss                                                                     
+ ['THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GOING THEY ARE NOT GO']
+ =============================================================================================================================================================================================================
+
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['GO BACK AND SINK AGAIN GO BACK AND SINK AGAIN GO BACK AND SINK AGAIN GO BACK AND SINK AGAI']
+ Attacked without Transcription Loss                                                                  
+ ['GO BACK AND TINK AGAIN GO BACK AND TINK AGAIN GO BACK AND TINK AGAIN GO BACK AND TINK AGAI']
+ Attacked with Transcription Loss                                                                     
+ ['GO BACK AND SINK AGAIN GO BACK AND SINK AGAIN GO BACK AND SINK AGAIN GO BACK AND SINK AGAI']
+ =============================================================================================================================================================================================================
+
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['BUT WE FINISHE THE SOUL BUT WE FINSHED THE SOUL BUT WE']
+ Attacked without Transcription Loss                                                                  
+ ['BUT WE FINSHE THE SHOUL BUT WE FINISHED THE SHOUL BUT WE']
+ Attacked with Transcription Loss                                                                     
+ ['BUT WE FINISHE THE SOUL BUT WE FINSHED THE SOUL BUT WE']
+ =============================================================================================================================================================================================================
+
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS']
+ Attacked without Transcription Loss                                                                  
+ ['I WOULD LIKE TO STAY WITH RINGERS I WOULD LIKE TO STAY WITH RINGERS I WOULD LIKE TO STAY WITH RINGERS I WOULD LIKE TO STAY WITH RINGERS']
+ Attacked with Transcription Loss                                                                     
+ ['I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS I WOULD LIKE TO STAY WITH RANGERS']
+ =============================================================================================================================================================================================================
+
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ["IT'S ONLY IR IT'S ONLY FAIR"]
+ Attacked without Transcription Loss                                                                  
+ ["IT'S ONLY AIR IT'S ONLY FAIR"]
+ Attacked with Transcription Loss                                                                     
+ ["IT'S ONLY IR IT'S ONLY FAIR"]
+ =============================================================================================================================================================================================================
+
+
+
+Forged and Attacked Transcriptions (T1):
+Forged Transcription                                                                                 
+ ['METLY YOU HAVE TO BE TOL METALLY YOU HAVE TO BE TOLF MENTAL']
+ Attacked without Transcription Loss                                                                  
+ ['MERALY YOU HAVE TO BE TOL MERALLY YOU HAVE TO BE TOLF MERAL']
+ Attacked with Transcription Loss                                                                     
+ ['METLY YOU HAVE TO BE TOL METALLY YOU HAVE TO BE TOLF MENTAL']
+ =============================================================================================================================================================================================================
