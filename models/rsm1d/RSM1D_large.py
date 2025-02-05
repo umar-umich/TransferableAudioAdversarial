@@ -75,6 +75,11 @@ class SSDNet1D_L(nn.Module):  # Res-TSSDNet
         self.out = nn.Linear(in_features=64, out_features=2)
 
     def forward(self, x):
+
+        nb_samp = x.shape[0]
+        len_seq = x.shape[1]
+        x=x.view(nb_samp,1,len_seq)
+
         x = F.relu(self.bn1(self.conv1(x)))
         x = F.max_pool1d(x, kernel_size=4)
 
@@ -177,6 +182,10 @@ class DilatedNet_L(nn.Module):  # Inc-TSSDNet
         self.out = nn.Linear(in_features=64, out_features=2)
 
     def forward(self, x):
+        nb_samp = x.shape[0]
+        len_seq = x.shape[1]
+        x=x.view(nb_samp,1,len_seq)
+
         x = F.relu(self.bn1(self.conv1(x)))
         x = F.max_pool1d(x, kernel_size=4)
 

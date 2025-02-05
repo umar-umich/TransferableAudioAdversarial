@@ -12,7 +12,7 @@ class RawNetDATAReader(data.Dataset):
     def __init__(self, args=None, split=None, labels=None):
         self.args = args
         if split == 'TRAIN':
-            labels_file = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trn.txt'
+            labels_file = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trl.txt'
             labels = get_labels(labels_file)
             self.data_root = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_train/flac'
         elif split == 'TEST':
@@ -27,7 +27,7 @@ class RawNetDATAReader(data.Dataset):
         self.labels = labels  # Provided labels for real/fake classification
 
         # Combine real and fake files into a single list with labels
-        real_files_count = 1*len(self.list_files(label=0))  # 0 for real
+        real_files_count = self.args.ratio*len(self.list_files(label=0))  # 0 for real
         
         # Initialize file paths list
         self.file_paths = []
@@ -41,10 +41,16 @@ class RawNetDATAReader(data.Dataset):
 
         print(f"{split}, Total samples: {len(self.file_paths)}")
 
-        
         # Set n to the minimum count of both labels to ensure balanced dataset
         self.n = len(self.file_paths) # real_files_count
         print(f'Balanced samples: {self.n}')
+        # Count the number of real and fake samples
+        real_count = sum(1 for _, label in self.file_paths if label == 0)
+        fake_count = sum(1 for _, label in self.file_paths if label == 1)
+
+        print(f"Real samples: {real_count}")
+        print(f"Fake samples: {fake_count}")
+
 
     def __len__(self):
         # The dataset length is 2 * n (since you have both labels)
@@ -84,5 +90,6 @@ parser.add_argument('--lr', '-lr', type=float, default=0.001, help='')
 # parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0], help='')
 args = parser.parse_args()
 print(args)
+args.ratio = 4
 
 train_dataset = RawNetDATAReader(args=args, split='TRAIN')

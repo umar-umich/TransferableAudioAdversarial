@@ -1,3 +1,4 @@
+import os
 import argparse
 import json
 
@@ -165,69 +166,82 @@ def train_model(model, criterion, optimizer , train_loader, val_loader, num_epoc
     print(f"Training complete. Best AUC: {best_auc:.4f}, Best EER: {best_eer:.4f}")
     return best_model_path
 
+def get_model(model_name, device):
 
-# Main script
-parser = argparse.ArgumentParser()
-parser.add_argument('--root', '-rt', type=str, default='../DATASETS/DTIM', help='')
-parser.add_argument('--nEpochs', '-epoch', type=int, default=50, help='')
-parser.add_argument('--batch_size', '-b', type=int, default=256, help='')
-parser.add_argument('--num_workers', '-w', type=int, default=16, help='')
-parser.add_argument('--lr', '-lr', type=float, default=0.001, help='')
-# parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0], help='')
-args = parser.parse_args()
-print(args)
+    if model_name.lower() == 'aasist':
+        # Instantiate the aasist model
+        with open("./models/aasist/AASIST.conf", "r") as f_json:
+            assist_config = json.loads(f_json.read())
+        model_config = assist_config["model_config"]
+        model = Model_ASSIST(model_config).to(device)
+    elif model_name.lower() == 'rawnet3':
+        # Instantiate the rawnet3 model
+        model = RawNetWithFC(embedding_dim=256, num_classes=2).to(device)
+    elif model_name.lower() == 'rawnet2':
+        # Instantiate the rawnet2 model
+        with open("./models/rawnet/RawNet2_config.yaml", 'r') as f_yaml:
+            parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
+        model = RawNet2(parser1['model'], device).to(device)
+    elif model_name.lower() == 'rawboost':
+        # Instantiate the rawboost model
+        with open("./models/rawboost/model_config_RawNet.yaml", 'r') as f_yaml:
+            parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
+        model = RawNet(parser1['model'], device).to(device)
+    elif model_name.lower() == 'ssdnet':
+        # SSDNet Model
+        model = SSDNet1D_L().to(device)    # SSDNet1D_S, DilatedNet_S, SSDNet1D_L, DilatedNet_L
+    elif model_name.lower() == 'inc_ssdnet':
+        # SSDNet Model
+        model = DilatedNet_L().to(device)    # SSDNet1D_S, DilatedNet_S, SSDNet1D_L, DilatedNet_L
+    elif model_name.lower() == 'resnet1d':
+        # ResNet1D
+        model = ResNet1D(in_channels = 1 , base_filters = 128, kernel_size = 5, stride=2, groups = 1, n_block = 3, n_classes = 2).to(device)
+    elif model_name.lower() == 'msresnet':
+        # MSResNet
+        model = MSResNet(input_channel=1, layers=[1, 1, 1, 1], num_classes=2).to(device)
+    elif model_name.lower() == 'acnn1d':
+        # ACNN1D
+        model = ACNN(in_channels = 1 , out_channels = 1024, att_channels=256, n_len_seg = 256, n_classes = 2, device=device, verbose = False).to(device)
 
-# Example usage
-train_dataset = RawNetDATAReader(args=args, split='TRAIN')
-train_loader = data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True, drop_last=True)
+    return model
 
-dev_dataset = RawNetDATAReader(args=args, split='TEST')
-dev_loader = data.DataLoader(dev_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
+    # # CNN1D
+    # model = CNN(in_channels = 1 , out_channels = 1024, n_len_seg = 256, n_classes = 2, device=device, verbose = False).to(device)
 
-device = torch.device('cuda',3)
+    # # RCNN1D
+    # model = CRNN(in_channels = 1 , out_channels = 1024, n_len_seg = 256, n_classes = 2, device=device, verbose = False).to(device)
 
-# # Instantiate the rawnet2 model
-# with open("./models/rawnet/RawNet2_config.yaml", 'r') as f_yaml:
-#     parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
-# model = RawNet2(parser1['model'], device).to(device)
+if __name__ == '__main__':
 
-# # Instantiate the rawboost model
-# with open("./models/rawboost/model_config_RawNet.yaml", 'r') as f_yaml:
-#     parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
-# model = RawNet(parser1['model'], device).to(device)
+    # Main script
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--root', '-rt', type=str, default='../DATASETS/DTIM', help='')
+    parser.add_argument('--nEpochs', '-epoch', type=int, default=50, help='')
+    parser.add_argument('--batch_size', '-b', type=int, default=256, help='')
+    parser.add_argument('--num_workers', '-w', type=int, default=4, help='')
+    parser.add_argument('--lr', '-lr', type=float, default=0.001, help='')
+    # parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0], help='')
+    args = parser.parse_args()
+    print(args)
 
+    args.ratio = 8
+    # Example usage
+    train_dataset = RawNetDATAReader(args=args, split='TRAIN')
+    train_loader = data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True, drop_last=True)
 
-# # Instantiate the rawnet3 model
-# model = RawNetWithFC(embedding_dim=256, num_classes=2).to(device)
+    dev_dataset = RawNetDATAReader(args=args, split='TEST')
+    dev_loader = data.DataLoader(dev_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
 
-# # Instantiate the aasist model
-# with open("./models/aasist/AASIST.conf", "r") as f_json:
-#     assist_config = json.loads(f_json.read())
-# model_config = assist_config["model_config"]
-# model = Model_ASSIST(model_config).to(device)
+    model_name = "inc_ssdnet" # models_list = "aasist", "rawnet3", "rawnet2", "rawboost", "ssdnet", "inc_ssdnet", "resnet1d", "msresnet", "acnn1d"
+    save_every=10
+    device_id = 3
+    device = torch.device('cuda',device_id)
+    model = get_model(model_name,device)
 
-# SSDNet Model
-# model = DilatedNet_L().to(device)    # SSDNet1D_S, DilatedNet_S, SSDNet1D_L, DilatedNet_L
+    os.makedirs(f"./weights/{model_name}",exist_ok=True)
+    model_save_path = f"./weights/{model_name}/best_{model_name}_ratio_{args.ratio}"
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=args.lr)  # Only optimize the FC layer
 
-# ResNet1D
-# model = ResNet1D(in_channels = 1 , base_filters = 128, kernel_size = 5, stride=2, groups = 1, n_block = 3, n_classes = 2).to(device)
-
-# CNN1D
-# model = CNN(in_channels = 1 , out_channels = 1024, n_len_seg = 256, n_classes = 2, device=device, verbose = False).to(device)
-
-# ACNN1D
-# model = ACNN(in_channels = 1 , out_channels = 1024, att_channels=256, n_len_seg = 256, n_classes = 2, device=device, verbose = False).to(device)
-
-# RCNN1D
-# model = CRNN(in_channels = 1 , out_channels = 1024, n_len_seg = 256, n_classes = 2, device=device, verbose = False).to(device)
-
-# MSResNet
-model = MSResNet(input_channel=1, layers=[1, 1, 1, 1], num_classes=2).to(device)
-
-
-model_save_path = "./weights/resnet/best_msresnet_ratio_1"
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=args.lr)  # Only optimize the FC layer
-
-best_model_path = train_model(model, criterion, optimizer , train_loader, dev_loader, num_epochs=args.nEpochs, save_path=model_save_path,save_every=5)
-print(f"Best model saved at: {best_model_path}")
+    best_model_path = train_model(model, criterion, optimizer , train_loader, dev_loader, num_epochs=args.nEpochs, save_path=model_save_path,save_every=save_every)
+    print(f"Best model saved at: {best_model_path}")

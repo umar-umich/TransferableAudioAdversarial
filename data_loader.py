@@ -12,7 +12,7 @@ class DATAReader(data.Dataset):
         self.split = split
         if self.split in 'TRAIN':
             # load corresponding labels
-            train_labels_file = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trn.txt'
+            train_labels_file = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trl.txt'
             labels = get_labels(train_labels_file)
             self.data_root = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_train/flac'
         elif self.split in 'TEST':

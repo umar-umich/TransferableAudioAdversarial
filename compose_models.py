@@ -17,6 +17,16 @@ from models.rawnet.RawNet2 import RawNet2
 from models.rawnet.RawNet3 import RawNet3
 from models.rawnet.RawNetBasicBlock import Bottle2neck
 from models.rsm1d.RSM1D import DilatedNet, SSDNet1D
+import tensorflow as tf
+
+# Function to make prediction using the loaded model and preprocessed audio
+def get_psanet():
+    print("Loading TF model")
+    # Load the model
+    model_path = './weights/psanet/mybestmodel.hdf5'
+    model = tf.keras.models.load_model(model_path)
+    print("TF model loaded")
+    return model
 
 
 def get_rawnet3():
@@ -73,6 +83,10 @@ def get_aasist(device):
     assist_model = Model_ASSIST(model_config)
     assist_model.load_state_dict(torch.load("./weights/AASIST.pth", map_location=device, weights_only=True))
     # assist_model = assist_model.to(device)  # Move model to the appropriate device
+
+    num_total_learnable_params = sum(i.numel() for i in assist_model.parameters() if i.requires_grad)
+    print('Number of learnable params: {}.'.format(num_total_learnable_params))
+
     assist_model.eval()  # Set the model to evaluation mode
     return assist_model
 
