@@ -69,10 +69,10 @@ class CNN(nn.Module):
         
     def forward(self, x):
 
-
-        nb_samp = x.shape[0]
-        len_seq = x.shape[1]
-        x=x.view(nb_samp,1,len_seq)
+        # required for surrogate training
+        # nb_samp = x.shape[0]
+        # len_seq = x.shape[1]
+        # x=x.view(nb_samp,1,len_seq)
 
         self.n_channel, self.n_length = x.shape[-2], x.shape[-1]
         assert (self.n_length % self.n_len_seg == 0), "Input n_length should divided by n_len_seg"

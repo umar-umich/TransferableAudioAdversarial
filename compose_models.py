@@ -165,7 +165,7 @@ def get_resnet(device):
 
 def get_msresnet(device):
     ms_resnet_model = MSResNet(input_channel=1, layers=[1, 1, 1, 1], num_classes=2)   # ./weights/resnet/best_msresnet_ratio_4_epoch_10.pth
-    check_point = torch.load("./weights/resnet/best_msresnet_ratio_8_epoch_25.pth", map_location=device, weights_only=True)
+    check_point = torch.load("./weights/msresnet/best_msresnet_ratio_8_epoch_25.pth", map_location=device, weights_only=True)
     ms_resnet_model.load_state_dict(check_point)
     ms_resnet_model.eval()
     return ms_resnet_model
@@ -200,20 +200,20 @@ def get_rawnet_3(device):
     rawnet_model.eval()
     return rawnet_model
 
-def get_rawnet_2(device):
-    with open("./models/rawnet/RawNet2_config.yaml", 'r') as f_yaml:
-        parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
-    rawnet_model = RawNet2(parser1['model'], device)
-    rawnet_model.load_state_dict(torch.load("./weights/rawnet_2/best_rawnet2_6.pth", map_location=device, weights_only=True))
-    # rawnet_model = rawnet_model.to(device)  # Move model to the appropriate device
-    rawnet_model.eval()
-    return rawnet_model
+# def get_rawnet_2(device):
+#     with open("./models/rawnet/RawNet2_config.yaml", 'r') as f_yaml:
+#         parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
+#     rawnet_model = RawNet2(parser1['model'], device)
+#     rawnet_model.load_state_dict(torch.load("./weights/rawnet_2/best_rawnet2_6.pth", map_location=device, weights_only=True))
+#     # rawnet_model = rawnet_model.to(device)  # Move model to the appropriate device
+#     rawnet_model.eval()
+#     return rawnet_model
 
 def get_rawnet2(device):
     with open("./models/rawnet/RawNet2_config.yaml", 'r') as f_yaml:
         parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
     rawnet_model = RawNet2(parser1['model'], device)
-    rawnet_model.load_state_dict(torch.load("./weights/rawnet_2/pre_trained_DF_RawNet2.pth", map_location=device, weights_only=True))
+    rawnet_model.load_state_dict(torch.load("./weights/rawnet_2/best_rawnet2_6.pth", map_location=device, weights_only=True))
     rawnet_model = rawnet_model.to(device)  # Move model to the appropriate device
     rawnet_model.eval()
     return rawnet_model

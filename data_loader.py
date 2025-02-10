@@ -12,26 +12,26 @@ class DATAReader(data.Dataset):
         self.split = split
         if self.split in 'TRAIN':
             # load corresponding labels
-            train_labels_file = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trl.txt'
+            train_labels_file = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trl.txt'
             labels = get_labels(train_labels_file)
-            self.data_root = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_train/flac'
+            self.data_root = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_train/flac'
         elif self.split in 'TEST':
-            test_labels_file = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt'
+            test_labels_file = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt'
             labels = get_labels(test_labels_file)
-            self.data_root = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_eval/flac'
+            self.data_root = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_eval/flac'
                     # self.split = split
         elif self.split in 'DEV':
-            dev_labels_file = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.dev.trl.txt'
+            dev_labels_file = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.dev.trl.txt'
             labels = get_labels(dev_labels_file)
-            self.data_root = '/data/Umar/A_Datasets/ASV_2019/ASVspoof2019_LA_dev/flac'
+            self.data_root = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_dev/flac'
         elif self.split in 'In_The_Wild':
-            dev_labels_file = '/data/Umar/A_Datasets/release_in_the_wild/meta.csv'
+            dev_labels_file = '/data/Shared_Audio/A_Datasets/release_in_the_wild/meta.csv'
             labels = get_in_the_wild_labels(dev_labels_file)
-            self.data_root = '/data/Umar/A_Datasets/release_in_the_wild'
+            self.data_root = '/data/Shared_Audio/A_Datasets/release_in_the_wild'
         elif self.split in 'WaveFake':
-            # dev_labels_file = '/data/Umar/A_Datasets/release_in_the_wild/meta.csv'
+            # dev_labels_file = '/data/Shared_Audio/A_Datasets/release_in_the_wild/meta.csv'
             # labels = get_in_the_wild_labels(dev_labels_file)
-            self.data_root = '/data/Umar/A_Datasets/WaveFake/ljspeech_hifiGAN'
+            self.data_root = '/data/Shared_Audio/A_Datasets/WaveFake/ljspeech_hifiGAN'
             
 
         self.labels = labels  # Provided labels for real/fake classification
@@ -141,7 +141,7 @@ def pad(x, max_len=64600):
 
 
 if __name__ == '__main__':
-    dev_labels_file = '/data/Umar/A_Datasets/release_in_the_wild/meta.csv'
+    dev_labels_file = '/data/Shared_Audio/A_Datasets/release_in_the_wild/meta.csv'
     labels = get_in_the_wild_labels(dev_labels_file)
     print(labels)
 

@@ -17,7 +17,7 @@ from sklearn.metrics import accuracy_score
 from generator_simple import GeneratorSimple
 from discriminator_simple import DiscriminatorSimple
 from data_loader import DATAReader
-from compose_models import get_resnet, get_sentence_transformer, get_ssdnet, get_inc_ssdnet, get_wav2vec2_model, get_speech_to_text_model
+from compose_models import get_cnn, get_msresnet, get_rawboost, get_rawnet2, get_resnet, get_sentence_transformer, get_ssdnet, get_inc_ssdnet, get_wav2vec2_model, get_speech_to_text_model
 from utils import batch_audio_to_mel, batch_mel_to_audio, get_transciption_loss, transcribe_audio, transcribe_s2t
 from visualize import compare_audio_samples
 from tqdm import tqdm
@@ -30,13 +30,14 @@ class Trainer:
         self,
         G: torch.nn.Module,
         D: torch.nn.Module,
-        cl_model1: torch.nn.Module,
-        cl_model2: torch.nn.Module,
-        cl_model3: torch.nn.Module,
+        cl_models: dict,
+        # cl_model1: torch.nn.Module,
+        # cl_model2: torch.nn.Module,
+        # cl_model3: torch.nn.Module,
         t_processor_1, 
         t_model_1: torch.nn.Module,
-        t_processor_2,
-        t_model_2: torch.nn.Module,
+        # t_processor_2,
+        # t_model_2: torch.nn.Module,
         sentence_transformer: torch.nn.Module,
         optimizer_G: torch.optim.Optimizer,
         optimizer_D: torch.optim.Optimizer,
@@ -51,13 +52,14 @@ class Trainer:
         self.device = device # torch.device(f"cuda:{gpu_id}")
         self.G = G.to(self.device)
         self.D = D.to(self.device)
-        self.cl_model1 = cl_model1.to(self.device)
-        self.cl_model2 = cl_model2.to(self.device)
-        self.cl_model3 = cl_model3.to(self.device)
+        self.cl_models = {name: model.to(self.device) for name, model in cl_models.items()}
+        # self.cl_model1 = cl_model1.to(self.device)
+        # self.cl_model2 = cl_model2.to(self.device)
+        # self.cl_model3 = cl_model3.to(self.device)
         self.t_processor_1 = t_processor_1        
         self.t_model_1 = t_model_1.to(self.device)
-        self.t_processor_2 = t_processor_2 
-        self.t_model_2 = t_model_2.to(self.device)
+        # self.t_processor_2 = t_processor_2 
+        # self.t_model_2 = t_model_2.to(self.device)
         self.sentence_transformer = sentence_transformer.to(self.device)
         self.optimizer_G = optimizer_G
         self.optimizer_D = optimizer_D
@@ -69,8 +71,17 @@ class Trainer:
         self.adversarial_loss = nn.BCEWithLogitsLoss()
         self.classification_loss = nn.CrossEntropyLoss()
         self.scaler = torch.GradScaler()
-        self.s1_w, self.s2_w, self.s3_w, self.t1_w = 0.0001, 0.0001, 0.0001, 0.0001
-        self.save_dir_path = f"{save_dir_path}_{self.s1_w}_{self.s2_w}_{self.s3_w}_{self.t1_w}"
+        self.s_w = { "ssdnet":0.0001,
+                    "inc_ssdnet":0.0001,
+                    "rawboost":0.0001,
+                    "rawnet2":0.0001,
+                    "resnet":0.0001,
+                    "msresnet":0.0001,
+                    "cnn":0.0001,
+                    }
+        self.t1_w = 0.0001
+        s_w_str = "_".join([f"{value:.6f}" for value in self.s_w.values()])
+        self.save_dir_path = f"{save_dir_path}_{s_w_str}_{self.t1_w}"
 
 
 
@@ -101,13 +112,15 @@ class Trainer:
         return self.classification_loss(logits, y.to(dtype=torch.long))
 
     def train(self, epoch: int):
+        self.G.train()
         # self._run_epoch(epoch)
         # if epoch % self.save_every == 0:
         #     self._save_checkpoint(epoch)
-        g_losses, d_losses, c1_losses, c2_losses, c3_losses, t1_losses, t2_losses = [], [], [], [], [], [], []
+        g_losses, d_losses,  t1_losses, t2_losses = [], [], [], []
+        c_losses_dict = {name: [] for name in self.s_w}  # Create a dictionary for classification losses
+
 
         progress_bar = tqdm(self.train_loader, desc=f"Epoch {epoch}", unit="batch", leave=True)
-
         for index, train_sample in enumerate(progress_bar):
             real = train_sample[0].unsqueeze(1).to(self.device, dtype=torch.float)
             forged = train_sample[2].unsqueeze(1).to(self.device, dtype=torch.float)
@@ -118,6 +131,8 @@ class Trainer:
             self.optimizer_G.zero_grad()
 
             with torch.autocast(device_type='cuda', dtype=torch.float16):  # Enable Mixed Precision
+                assert self.G.training, "Error: Generator is in eval mode!"
+
                 attacked = self.G(forged)
 
                 forged_transciption1 = transcribe_audio(forged,self.t_processor_1, self.t_model_1, self.device)
@@ -142,13 +157,14 @@ class Trainer:
 
                 per_loss = self.perceptual_loss(forged, attacked)
                 adv_loss = self.adversarial_loss(y_real, self.D(attacked).squeeze())
-                c1_loss = self.sLoss(attacked, y_real.to(dtype=torch.long),self.cl_model1)
-                c2_loss = self.sLoss(attacked, y_real.to(dtype=torch.long),self.cl_model2)
-                c3_loss = self.sLoss(attacked.squeeze(1), y_real.to(dtype=torch.long),self.cl_model3)   # used fake label just to revert the label  for rawnet
+                c_losses = {name: self.sLoss(attacked, y_real.to(dtype=torch.long), model) for name, model in self.cl_models.items()}
+                # c1_loss = self.sLoss(attacked, y_real.to(dtype=torch.long),self.cl_model1)
+                # c2_loss = self.sLoss(attacked, y_real.to(dtype=torch.long),self.cl_model2)
+                # c3_loss = self.sLoss(attacked.squeeze(1), y_real.to(dtype=torch.long),self.cl_model3)   # used fake label just to revert the label  for rawnet
                 # c3_loss = np.float32(c3_loss.item())   # required for rawnet_2
 
-                print(f"C losses: {c1_loss}, {c2_loss}, {c3_loss}: T1 loss: {t1_loss}")#, T2 loss: {t2_loss}")
-                g_loss = per_loss + adv_loss + self.s1_w*c1_loss + self.s2_w*c2_loss + self.t1_w*t1_loss #+ self.s3_w*c3_loss
+                print(f"C losses: {', '.join([f'{name}: {loss:.4f}' for name, loss in c_losses.items()])}: T1 loss: {t1_loss}")#, T2 loss: {t2_loss}")
+                g_loss = per_loss + adv_loss + sum(self.s_w[name] * c_losses[name].item() for name in self.s_w) + self.t1_w*t1_loss #+ self.s3_w*c3_loss
 
             # g_loss.backward()
             # self.optimizer_G.step()
@@ -177,26 +193,25 @@ class Trainer:
 
             g_losses.append(g_loss.item())
             d_losses.append(d_loss.item())
-            # d_losses.append(d_loss.detach().cpu().numpy())
-
-            c1_losses.append(c1_loss.item())
-            c2_losses.append(c2_loss.item())
-            c3_losses.append(c3_loss.item())
+            # Append losses dynamically
+            for name, loss in c_losses.items():
+                c_losses_dict[name].append(loss.item())
             t1_losses.append(t1_loss.item())
 
             # Update tqdm progress bar with current losses
             progress_bar.set_postfix({
                 "G_Loss": f"{np.mean(g_losses):.4f}",
-                "C1_Loss": f"{np.mean(c1_losses):.4f}",
-                "C2_Loss": f"{np.mean(c2_losses):.4f}",
-                "C3_Loss": f"{np.mean(c3_losses):.4f}",
+                **{f"{name}_Loss": f"{np.mean(losses):.4f}" for name, losses in c_losses_dict.items()},
+
                 "D_Loss": f"{np.mean(d_losses):.4f}",
                 "T1_Loss": f"{np.mean(t1_losses):.4f}",
-                # "T2_Loss": f"{np.mean(t2_losses):.4f}",
             })
 
         progress_bar.close()  # Ensure tqdm closes cleanly when done
-        return np.mean(g_losses), np.mean(c1_losses), np.mean(c2_losses), np.mean(c3_losses), np.mean(d_losses), np.mean(t1_losses)#, np.mean(t2_losses)
+        return (np.mean(g_losses),
+                *(np.mean(losses) for losses in c_losses_dict.values()),  # Unpack classification losses dynamically
+                np.mean(d_losses),
+                np.mean(t1_losses))
     
     def cal_acc(self, y, x, model):
         # outputs = inception(x)
@@ -212,11 +227,7 @@ class Trainer:
     def test(self,epoch=0):
         self.G.eval()
         # sampler = DistributedSampler(test_dataset)
-        accuracies = {
-            "cl_model1": {"real": [], "fake": [], "af": []},
-            "cl_model2": {"real": [], "fake": [], "af": []},
-            "cl_model3": {"real": [], "fake": [], "af": []},
-        }
+        accuracies = {name: {"real": [], "fake": [], "af": []} for name in self.cl_models.keys()}
 
         progress_bar = tqdm(self.test_loader, desc=f"[Test] Epoch {epoch}", unit="batch", leave=True)
 
@@ -244,15 +255,17 @@ class Trainer:
                     compare_audio_samples(forged_audio, attacked_audio, forged_transciption1, attacked_transciption1, epoch, index,wav_dir_path, sr=16000)
 
 
-                for model_name, model in zip(
-                    ["cl_model1", "cl_model2", "cl_model3"], [self.cl_model1, self.cl_model2, self.cl_model3]
-                ):
-                    
-                    if model_name in 'cl_model3':
-                        accuracies[model_name]["real"].append(self.cal_acc(y_real, real.squeeze(1), model))          # used fake label just to revert the label  for rawnet
-                        accuracies[model_name]["fake"].append(self.cal_acc(y_fake, forged.squeeze(1), model))   
-                        accuracies[model_name]["af"].append(self.cal_acc(y_fake, fake.squeeze(1), model))
-                    else:
+                # for model_name, model in zip(
+                #     ["cl_model1", "cl_model2", "cl_model3"], [self.cl_model1, self.cl_model2, self.cl_model3]
+                # ):
+                for model_name, model in self.cl_models.items():                    
+                    with torch.no_grad():  # No gradients needed during testing
+                        # if model_name in 'cl_model3':
+                        #     accuracies[model_name]["real"].append(self.cal_acc(y_real, real.squeeze(1), model))          # used fake label just to revert the label  for rawnet
+                        #     accuracies[model_name]["fake"].append(self.cal_acc(y_fake, forged.squeeze(1), model))   
+                        #     accuracies[model_name]["af"].append(self.cal_acc(y_fake, fake.squeeze(1), model))
+                        # else:
+                        model.eval()
                         accuracies[model_name]["real"].append(self.cal_acc(y_real, real, model))
                         accuracies[model_name]["fake"].append(self.cal_acc(y_fake, forged, model))
                         accuracies[model_name]["af"].append(self.cal_acc(y_fake, fake, model))
@@ -290,15 +303,24 @@ def load_models(device):
     # G = DDP(G, device_ids=[local_rank])
     # D = DDP(D, device_ids=[local_rank])
     # Load classification models
-    cl_model1 = get_ssdnet('original', device) #DDP(get_ssdnet(device), device_ids=[local_rank])
-    cl_model2 = get_inc_ssdnet('original', device) #DDP(get_inc_ssdnet(device), device_ids=[local_rank])
-    cl_model3 = get_resnet(device) #DDP(get_inc_ssdnet(device), device_ids=[local_rank])
+    cl_models = {
+        "ssdnet": get_ssdnet('original', device),
+        "inc_ssdnet": get_inc_ssdnet('original', device),
+        "rawboost": get_rawboost(device),
+        "rawnet2": get_rawnet2(device),
+        "resnet": get_resnet(device),
+        "msresnet": get_msresnet(device),
+        "cnn": get_cnn(device)
+    }
+    # cl_model1 = get_ssdnet('original', device) #DDP(get_ssdnet(device), device_ids=[local_rank])
+    # cl_model2 = get_inc_ssdnet('original', device) #DDP(get_inc_ssdnet(device), device_ids=[local_rank])
+    # cl_model3 = get_resnet(device) #DDP(get_inc_ssdnet(device), device_ids=[local_rank])
     
     t_processor_1, t_model_1 = get_wav2vec2_model(device)
-    t_processor_2, t_model_2 = get_speech_to_text_model(device)
+    # t_processor_2, t_model_2 = get_speech_to_text_model(device)
     sentence_transformer = get_sentence_transformer(device)
 
-    return G,D,cl_model1,cl_model2,cl_model3,t_processor_1, t_model_1,t_processor_2,t_model_2,sentence_transformer
+    return G,D,cl_models,t_processor_1, t_model_1,sentence_transformer  # t_processor_2,t_model_2,
 
 
 
@@ -328,11 +350,11 @@ def main(nEpochs, batch_size,lr,num_workers, save_output, device_id):
     print(f"GPU Device initialized: {str(device)}")
 
 
-    G,D,cl_model1,cl_model2,cl_model3,t_processor_1, t_model_1,t_processor_2,t_model_2, sentence_transformer = load_models(device)
+    G,D,cl_models,t_processor_1, t_model_1,sentence_transformer = load_models(device)
     optimizer_G,optimizer_D,scheduler_G,scheduler_D = load_optims(G,D,lr)
     train_loader,test_loader = prepare_dataloader(batch_size, num_workers)
 
-    trainer = Trainer(G,D,cl_model1,cl_model2,cl_model3,t_processor_1, t_model_1,t_processor_2,t_model_2, sentence_transformer,\
+    trainer = Trainer(G,D,cl_models,t_processor_1, t_model_1,sentence_transformer,\
                       optimizer_G,optimizer_D,train_loader,test_loader,save_dir_path,save_output, device)
     checkpoint_dir_path = 'CHECKPOINTS_'+trainer.save_dir_path
 
@@ -363,57 +385,55 @@ def main(nEpochs, batch_size,lr,num_workers, save_output, device_id):
                 f.write("\n\n")
             # del generator_file_content
 
-        g_loss, c1_loss,c2_loss, c3_loss, d_loss, t1_loss = trainer.train(epoch)
+        losses = trainer.train(epoch)  # Get all returned losses dynamically
+
+        g_loss = losses[0]  # Generator loss
+        *c_losses, d_loss, t1_loss = losses[1:]  # Unpack classification losses dynamically
 
         scheduler_G.step()
         scheduler_D.step()
 
-        print("[Train] [Epoch %d/%d], [LR: G=%f, D=%f], [C1 loss: %f], [C2 loss: %f],  [C3 loss: %f], [D loss: %f], [G loss: %f], [T1 loss: %f]" % (
-            epoch, args.nEpochs, scheduler_G.get_last_lr()[0],  scheduler_D.get_last_lr()[0], c1_loss, c2_loss, c3_loss, d_loss, g_loss, t1_loss))
+        c_losses_str = " ".join([f"[C{i+1} loss: {c_loss:.6f}]" for i, c_loss in enumerate(c_losses)])
 
+        print(f"[Train] [Epoch {epoch}/{args.nEpochs}], [LR: G={scheduler_G.get_last_lr()[0]:f}, D={scheduler_D.get_last_lr()[0]:f}], "
+            f"{c_losses_str} [D loss: {d_loss:.6f}], [G loss: {g_loss:.6f}], [T1 loss: {t1_loss:.6f}]")
 
         results = trainer.test(epoch)
 
-        # Extract results for each classifier
-        r_acc, f_acc, af_acc = results["cl_model1"].values()
-        r2_acc, f2_acc, af2_acc = results["cl_model2"].values()
-        r3_acc, f3_acc, af3_acc = results["cl_model3"].values()
+        # Iterate through classifiers dynamically
+        for model_name, acc_dict in results.items():
+            r_acc, f_acc, af_acc = acc_dict.values()  # Extract accuracy values
+            print(f'[Test {model_name}] [Epoch {epoch}/{args.nEpochs}], [Acc: {r_acc:.2f}, {f_acc:.2f}, {af_acc:.2f}]')
 
-        # Print the results
-        print('[Test Cl_1] [Epoch %d/%d], [Acc: %.2f, %.2f, %.2f]' % (epoch, args.nEpochs, r_acc, f_acc, af_acc))
-        print('[Test Cl_2] [Epoch %d/%d], [Acc: %.2f, %.2f, %.2f]' % (epoch, args.nEpochs, r2_acc, f2_acc, af2_acc))
-        print('[Test Cl_3] [Epoch %d/%d], [Acc: %.2f, %.2f, %.2f]' % (epoch, args.nEpochs, r3_acc, f3_acc, af3_acc))
-
+        # Save output if enabled
         if save_output in "yes":
             checkpoints = {
-                'epoch': epoch+1,
+                'epoch': epoch + 1,
                 'state_dict': G.state_dict()
             }
-            
-            # Save the checkpoint
+
+            # Ensure checkpoint directory exists
             os.makedirs(checkpoint_dir_path, exist_ok=True)
 
+            # Save the generator model
             torch.save(checkpoints, osp.join(checkpoint_dir_path, f'generator_{epoch+1}.pth'))
-
 
             # Save test accuracies to a file
             results_file = osp.join(checkpoint_dir_path, 'test_accuracies.txt')
             with open(results_file, 'a') as f:
-                f.write(f"Cl1: Epoch {epoch + 1}/{args.nEpochs}: Acc=({r_acc:.2f}, {f_acc:.2f}, {af_acc:.2f}),\t\t")
-                f.write(f"Cl2: Epoch {epoch + 1}/{args.nEpochs}: Acc=({r2_acc:.2f}, {f2_acc:.2f}, {af2_acc:.2f}),\t\t")
-                f.write(f"Cl3: Epoch {epoch + 1}/{args.nEpochs}: Acc=({r3_acc:.2f}, {f3_acc:.2f}, {af3_acc:.2f})\n\n")
+                for model_name, acc_dict in results.items():
+                    r_acc, f_acc, af_acc = acc_dict.values()
+                    f.write(f"{model_name}: Epoch {epoch + 1}/{args.nEpochs}: Acc=({r_acc:.2f}, {f_acc:.2f}, {af_acc:.2f})\t\t")
+                f.write("\n\n")
 
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--root', '-rt', type=str, default='../DATASETS/DTIM', help='Dataset root path')
     parser.add_argument('--nEpochs', '-epoch', type=int, default=40, help='Number of epochs')
     parser.add_argument('--batch_size', '-b', type=int, default=16, help='Batch size')
-    parser.add_argument('--num_workers', '-w', type=int, default=16, help='Number of data loader workers')
+    parser.add_argument('--num_workers', '-w', type=int, default=4, help='Number of data loader workers')
     parser.add_argument('--lr', '-lr', type=float, default=0.001, help='Learning rate')
-    # parser.add_argument('--save_output', type=str, default="no", help='Save outputs or not')
-    parser.add_argument('--local_rank', type=int, default=0, help='Local rank for DDP')
     args = parser.parse_args()
     args.save_output = "yes"
     device_id = 3

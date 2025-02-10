@@ -223,9 +223,10 @@ class MSResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x0):
-        nb_samp = x0.shape[0]
-        len_seq = x0.shape[1]
-        x0 = x0.view(nb_samp,1,len_seq)
+        # required for surrogate training
+        # nb_samp = x0.shape[0]
+        # len_seq = x0.shape[1]
+        # x0 = x0.view(nb_samp,1,len_seq)
 
 
         x0 = self.conv1(x0)
