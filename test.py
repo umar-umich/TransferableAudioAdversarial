@@ -8,9 +8,10 @@ import numpy as np
 from sklearn.metrics import *
 from tqdm import tqdm
 # from natsort import natsort_keygen
-from compose_models import get_aasist, get_acnn, get_cnn, get_crnn, get_inc_ssdnet, get_msresnet, get_rawboost, get_rawnet_2, get_rawnet_3, get_resnet, get_ssdnet
+from compose_models import get_aasist, get_acnn, get_cnn, get_crnn, get_inc_ssdnet, get_msresnet, get_rawboost, get_rawnet2, get_rawnet_3, get_resnet, get_ssdnet
 from data_loader import DATAReader
 from test_generator import GeneratorSimple
+from opgan import Generator
 from wavefake_data_loader import WaveFakeDATAReader
 
 # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -46,7 +47,7 @@ def get_model(model_name,device):
     elif model_name.lower() == 'rawnet3':
         model = get_rawnet_3(device)    
     elif model_name.lower() == 'rawnet2':
-        model = get_rawnet_2(device)
+        model = get_rawnet2(device)
     elif model_name.lower() == 'ssdnet_original':
         model = get_ssdnet('original', device)
     elif model_name.lower() == 'ssdnet_small':
@@ -79,7 +80,7 @@ def get_model(model_name,device):
 
 def test(model_name, batch_size, num_workers, device):
 
-    dataset_name = 'In_The_Wild'
+    dataset_name = 'TEST'
     print(f"Dataset Name: {dataset_name}")
 
     test_dataset = DATAReader( split=dataset_name) # TEST, In_The_Wild, WaveFake
@@ -89,20 +90,19 @@ def test(model_name, batch_size, num_workers, device):
     # print('Device being used:', device)
 
     # G = nn.DataParallel(Generator())
-    G = GeneratorSimple()
+    # G = GeneratorSimple()
+    G = Generator()
+
     # CHECKPOINTS_2024-12-06-11-58-18_ssdnet_inc_ssdnet_0.0001_0.0001_0.01/generator_28.pth  with tanh
     # CHECKPOINTS_2024-12-02-21-59-44_ssdnet_inc_ssdnet_0.0001_0.0001_0.01/generator_27.pth with swish
     # CHECKPOINTS_2024-12-02-11-20-24_ssdnet_inc_ssdnet_0.0001_0.0005_0.01
 
 
-    checkpoint = torch.load("./CHECKPOINTS_2024-12-02-21-59-44_ssdnet_inc_ssdnet_0.0001_0.0001_0.01/generator_27.pth", map_location=device, weights_only=False)
+    checkpoint = torch.load(f"/data/Umar/Repos/Collaborative_Learning_Interspeech/Attacks/opgan.pth", map_location=device, weights_only=False)
     state_dict = checkpoint['state_dict']
+    new_state_dict = {k.replace('module.', ''): v for k, v in state_dict.items()}
 
-    
-
-    # Remove 'module.' prefix from keys
-    # new_state_dict = {k.replace('module.', ''): v for k, v in state_dict.items()}
-    G.load_state_dict(state_dict)
+    G.load_state_dict(new_state_dict)
     G = G.to(device)  # Move model to the appropriate device
     G.eval()
     real_acc, fake_acc, af_acc = [], [], []
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     device_id = 1
     device = torch.device('cuda', device_id)
 
-    model_name = 'msresnet'  # RawNet3, aasist, ssdnet_original, ssdnet_small, ssdnet_large, inc_ssdnet_original, inc_ssdnet_small, inc_ssdnet_large, 
+    model_name = 'ssdnet_original'  # RawNet3, aasist, ssdnet_original, ssdnet_small, ssdnet_large, inc_ssdnet_original, inc_ssdnet_small, inc_ssdnet_large, 
     # rawnet3, rawnet2, rawboost,resnet, msresnet, acnn, crnn, cnn
     print(f"Model: {model_name}")
     r_acc, f_acc, af_acc = test(model_name, args.batch_size, args.num_workers, device)

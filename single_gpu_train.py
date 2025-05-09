@@ -71,14 +71,15 @@ class Trainer:
         self.adversarial_loss = nn.BCEWithLogitsLoss()
         self.classification_loss = nn.CrossEntropyLoss()
         self.scaler = torch.GradScaler()
-        self.s_w = { "ssdnet":0.0001,
-                    "inc_ssdnet":0.0001,
-                    "rawboost":0.0001,
-                    "rawnet2":0.0001,
-                    "resnet":0.0001,
-                    "msresnet":0.0001,
-                    "cnn":0.0001,
-                    }
+        self.s_w = { 
+            # "ssdnet":0.0001,
+            # "inc_ssdnet":0.0001,
+            "rawboost":0.0001,
+            "rawnet2":0.0001,
+            # "resnet":0.0001,
+            # "msresnet":0.0001,
+            # "cnn":0.0001,
+            }
         self.t1_w = 0.0001
         s_w_str = "_".join([f"{value:.6f}" for value in self.s_w.values()])
         self.save_dir_path = f"{save_dir_path}_{s_w_str}_{self.t1_w}"
@@ -163,8 +164,8 @@ class Trainer:
                 # c3_loss = self.sLoss(attacked.squeeze(1), y_real.to(dtype=torch.long),self.cl_model3)   # used fake label just to revert the label  for rawnet
                 # c3_loss = np.float32(c3_loss.item())   # required for rawnet_2
 
-                print(f"C losses: {', '.join([f'{name}: {loss:.4f}' for name, loss in c_losses.items()])}: T1 loss: {t1_loss}")#, T2 loss: {t2_loss}")
-                g_loss = per_loss + adv_loss + sum(self.s_w[name] * c_losses[name].item() for name in self.s_w) + self.t1_w*t1_loss #+ self.s3_w*c3_loss
+                # print(f"C losses: {', '.join([f'{name}: {loss:.4f}' for name, loss in c_losses.items()])}: T1 loss: {t1_loss}")#, T2 loss: {t2_loss}")
+                g_loss = 0.01*per_loss + adv_loss + sum(self.s_w[name] * c_losses[name].item() for name in self.s_w) + self.t1_w*t1_loss #+ self.s3_w*c3_loss
 
             # g_loss.backward()
             # self.optimizer_G.step()
@@ -199,13 +200,13 @@ class Trainer:
             t1_losses.append(t1_loss.item())
 
             # Update tqdm progress bar with current losses
-            progress_bar.set_postfix({
-                "G_Loss": f"{np.mean(g_losses):.4f}",
-                **{f"{name}_Loss": f"{np.mean(losses):.4f}" for name, losses in c_losses_dict.items()},
+            # progress_bar.set_postfix({
+            #     "G_Loss": f"{np.mean(g_losses):.4f}",
+            #     **{f"{name}_Loss": f"{np.mean(losses):.4f}" for name, losses in c_losses_dict.items()},
 
-                "D_Loss": f"{np.mean(d_losses):.4f}",
-                "T1_Loss": f"{np.mean(t1_losses):.4f}",
-            })
+            #     "D_Loss": f"{np.mean(d_losses):.4f}",
+            #     "T1_Loss": f"{np.mean(t1_losses):.4f}",
+            # })
 
         progress_bar.close()  # Ensure tqdm closes cleanly when done
         return (np.mean(g_losses),
@@ -215,7 +216,7 @@ class Trainer:
     
     def cal_acc(self, y, x, model):
         # outputs = inception(x)
-        # with torch.no_grad():
+        # with torch.no_grad(): 
         outputs = model(x)   # (x.squeeze(1))[1] for aasist   # ssdnet_model, assist_model 
         outputs = nn.Softmax(dim=-1)(outputs)
         _, y_ = torch.max(outputs, 1)
@@ -304,13 +305,13 @@ def load_models(device):
     # D = DDP(D, device_ids=[local_rank])
     # Load classification models
     cl_models = {
-        "ssdnet": get_ssdnet('original', device),
-        "inc_ssdnet": get_inc_ssdnet('original', device),
+        # "ssdnet": get_ssdnet('original', device),
+        # "inc_ssdnet": get_inc_ssdnet('original', device),
         "rawboost": get_rawboost(device),
         "rawnet2": get_rawnet2(device),
-        "resnet": get_resnet(device),
-        "msresnet": get_msresnet(device),
-        "cnn": get_cnn(device)
+        # "resnet": get_resnet(device),
+        # "msresnet": get_msresnet(device),
+        # "cnn": get_cnn(device)
     }
     # cl_model1 = get_ssdnet('original', device) #DDP(get_ssdnet(device), device_ids=[local_rank])
     # cl_model2 = get_inc_ssdnet('original', device) #DDP(get_inc_ssdnet(device), device_ids=[local_rank])
