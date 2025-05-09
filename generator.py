@@ -13,7 +13,7 @@ def conv_block_1d(in_channels, out_channels):
     return layers
 
 class Generator(nn.Module):
-    def __init__(self, num_layers=4, num_features=128):
+    def __init__(self, num_layers=3, num_features=128):
         super(Generator, self).__init__()
         self.num_layers = num_layers
 

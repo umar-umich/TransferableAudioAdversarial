@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.nn import SyncBatchNorm  # Import SyncBatchNorm
+
 
 def block1_1d(in_channels, out_channels):
     """
@@ -8,7 +10,7 @@ def block1_1d(in_channels, out_channels):
     """
     layers = nn.Sequential(
         nn.Conv1d(in_channels=in_channels, out_channels=out_channels, kernel_size=7, stride=2, padding=3),
-        nn.BatchNorm1d(out_channels),
+        SyncBatchNorm(out_channels),
         nn.Tanh(),
         nn.MaxPool1d(kernel_size=3, stride=2)
     )
@@ -20,7 +22,7 @@ def block2_1d(in_channels, out_channels):
     """
     layers = nn.Sequential(
         nn.Conv1d(in_channels=in_channels, out_channels=out_channels, kernel_size=5, stride=2, padding=2),
-        nn.BatchNorm1d(out_channels),
+        SyncBatchNorm(out_channels),
         nn.Tanh(),
         nn.MaxPool1d(kernel_size=3, stride=2)
     )
@@ -32,7 +34,7 @@ def block3_1d(in_channels, out_channels):
     """
     layers = nn.Sequential(
         nn.Conv1d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, stride=1),
-        nn.BatchNorm1d(out_channels),
+        SyncBatchNorm(out_channels),
         nn.Tanh(),
         nn.AvgPool1d(kernel_size=5, stride=2)
     )
@@ -73,12 +75,26 @@ class DiscriminatorSimple(nn.Module):
 
     def normalized_F(self):
         """
-        Normalize the constrained-CNN weights.
+        Normalize the constrained-CNN weights without in-place operations.
         """
-        central_pixel = self.const_weight.data[:, 0, 2]
-        sumed = self.const_weight.data.sum(dim=2) - central_pixel
-        self.const_weight.data /= sumed.unsqueeze(-1)
-        self.const_weight.data[:, 0, 2] = -1.0
+        # with torch.no_grad():  # Temporarily disable gradient tracking
+        central_pixel = self.const_weight[:, 0, 2]
+        sumed = self.const_weight.sum(dim=2) - central_pixel
+        norm_weights = self.const_weight / sumed.unsqueeze(-1)
+        norm_weights[:, 0, 2] = -1.0
+        self.const_weight = nn.Parameter(norm_weights.clone())
+        # self.const_weight = norm_weights.clone()  # Create a new tensor with updated weights
+        # self.const_weight.copy_(norm_weights)  # Safely update the parameter
+
+
+    # def normalized_F(self):
+    #     """
+    #     Normalize the constrained-CNN weights.
+    #     """
+    #     central_pixel = self.const_weight.data[:, 0, 2]
+    #     sumed = self.const_weight.data.sum(dim=2) - central_pixel
+    #     self.const_weight.data /= sumed.unsqueeze(-1)
+    #     self.const_weight.data[:, 0, 2] = -1.0
     
     def init_weight(self):
         """
@@ -88,7 +104,7 @@ class DiscriminatorSimple(nn.Module):
             if isinstance(m, nn.Conv1d):
                 torch.nn.init.xavier_uniform_(m.weight)
 
-            elif isinstance(m, nn.BatchNorm1d):
+            elif isinstance(m, SyncBatchNorm):
                 m.weight.data.fill_(1)
                 m.bias.data.zero_()
 

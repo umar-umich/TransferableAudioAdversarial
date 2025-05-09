@@ -200,7 +200,7 @@ class RawNet(nn.Module):
         
     def forward(self, x, y = None,is_test=False):
         
-        
+        # Uncomment 3 lines for surrogate training/testing        
         nb_samp = x.shape[0]
         len_seq = x.shape[1]
         x=x.view(nb_samp,1,len_seq)

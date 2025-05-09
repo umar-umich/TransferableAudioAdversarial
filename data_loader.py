@@ -1,33 +1,44 @@
 import torch.utils.data as data
 import os
 import os.path as osp
-import soundfile as sf
 import numpy as np
 from glob import glob
+import csv
+
 
 class DATAReader(data.Dataset):
-    def __init__(self, args=None, split=None, labels=None):
-        self.args = args
-        if split in 'TRAIN':
+    def __init__(self, split=None, labels=None):
+        # self.data_root = data_root
+        self.split = split
+        if self.split in 'TRAIN':
             # load corresponding labels
-            train_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trn.txt'
+            train_labels_file = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trl.txt'
             labels = get_labels(train_labels_file)
-            args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_train/flac'
-        elif split in 'TEST':
-            test_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt'
+            self.data_root = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_train/flac'
+        elif self.split in 'TEST':
+            test_labels_file = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt'
             labels = get_labels(test_labels_file)
-            args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_eval/flac'
+            self.data_root = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_eval/flac'
                     # self.split = split
-        elif split in 'DEV':
-            dev_labels_file = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.dev.trl.txt'
+        elif self.split in 'DEV':
+            dev_labels_file = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.dev.trl.txt'
             labels = get_labels(dev_labels_file)
-            args.data_root = '/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_dev/flac'
+            self.data_root = '/data/Shared_Audio/A_Datasets/ASV_2019/ASVspoof2019_LA_dev/flac'
+        elif self.split in 'In_The_Wild':
+            dev_labels_file = '/data/Shared_Audio/A_Datasets/release_in_the_wild/meta.csv'
+            labels = get_in_the_wild_labels(dev_labels_file)
+            self.data_root = '/data/Shared_Audio/A_Datasets/release_in_the_wild'
+        elif self.split in 'WaveFake':
+            # dev_labels_file = '/data/Shared_Audio/A_Datasets/release_in_the_wild/meta.csv'
+            # labels = get_in_the_wild_labels(dev_labels_file)
+            self.data_root = '/data/Shared_Audio/A_Datasets/WaveFake/ljspeech_hifiGAN'
+            
 
         self.labels = labels  # Provided labels for real/fake classification
 
         # List real and fake files
-        self.real_files = self.list_files(args, label=0)  # 0 for real
-        self.fake_files = self.list_files(args, label=1)  # 1 for fake
+        self.real_files = self.list_files(label=0)  # 0 for real
+        self.fake_files = self.list_files(label=1)  # 1 for fake
 
         print(f"{split}, Real files: {len(self.real_files)}, Fake files: {len(self.fake_files)}")
 
@@ -58,12 +69,12 @@ class DATAReader(data.Dataset):
 
         return real_data, real_label, fake_data, fake_label
 
-    def list_files(self, args, label):
+    def list_files(self, label):
         file_list = []
-        dataset_path = self.args.data_root  # Assuming split is 'TRAIN' or 'TEST'
+        dataset_path = self.data_root  # Assuming split is 'TRAIN' or 'TEST'
 
         for file_name in os.listdir(dataset_path):
-            if file_name.endswith('.flac'):  # Audio files of interest
+            if file_name.endswith('.flac') or file_name.endswith('.wav'):  # Audio files of interest
                 file_path = os.path.join(dataset_path, file_name)
 
                 # Check label (real=0, fake=1)
@@ -88,11 +99,29 @@ def get_labels(labels_file):
     return labels
 
 
+def get_in_the_wild_labels(labels_file):
+    labels = {}
+    with open(labels_file, mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.DictReader(file, delimiter=',')  # Assuming tab-separated CSV, adjust delimiter if needed
+        # print("CSV Headers:", reader.fieldnames)  # This will show you the headers of the CSV
+
+        for row in reader:
+            file_id = os.path.splitext(row['file'].strip())[0]  # Strip extension from 'file' (e.g., '0.wav' -> '0')
+            label = row['label'].strip()   # Extract the label (e.g., 'spoof' or 'bona-fide')
+            
+            # Map the label to 1 (spoof) or 0 (bona-fide)
+            labels[file_id] = 1 if label == 'spoof' else 0
+    
+    return labels
+
+
 def load_preprocess_AASIST(path, cut=96000):   # 96000, 64600
     from torch import Tensor
-    import soundfile as sf
+    import librosa
 
-    X, _ = sf.read(path)
+
+    # X, _ = sf.read(path)
+    X, _ = librosa.load(path, sr=16000, mono=True)  # Record_1.mp3    Derek_orig_1.wav
     X_pad = pad(X, cut)
     x_inp = Tensor(X_pad)
     if len(x_inp.shape) != 1:
@@ -112,27 +141,31 @@ def pad(x, max_len=64600):
 
 
 if __name__ == '__main__':
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--data_root', '-rt', type=str, default='/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_eval/flac', help='Root directory for the dataset')
-    parser.add_argument('--split', '-sp', type=str, default='TRAIN', help='Split of the dataset (e.g., TRAIN, TEST)')
-    parser.add_argument('--labels_file', '-lf', type=str, default='/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt', help='Path to the labels file')
-    parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0, 1], help='GPU devices to use')
+    dev_labels_file = '/data/Shared_Audio/A_Datasets/release_in_the_wild/meta.csv'
+    labels = get_in_the_wild_labels(dev_labels_file)
+    print(labels)
+
+    # import argparse
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('--data_root', '-rt', type=str, default='/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_eval/flac', help='Root directory for the dataset')
+    # parser.add_argument('--split', '-sp', type=str, default='TRAIN', help='Split of the dataset (e.g., TRAIN, TEST)')
+    # parser.add_argument('--labels_file', '-lf', type=str, default='/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt', help='Path to the labels file')
+    # parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0, 1], help='GPU devices to use')
     
-    args = parser.parse_args()
+    # args = parser.parse_args()
 
-    # Get the labels from the provided text file
-    test_labels = get_labels(args.labels_file)
+    # # Get the labels from the provided text file
+    # test_labels = get_labels(args.labels_file)
 
-    # Initialize the dataset and dataloader
-    train_dataset = DATAReader(args=args, split=args.split, labels=test_labels)
-    train_loader = data.DataLoader(train_dataset, batch_size=24, shuffle=True)
+    # # Initialize the dataset and dataloader
+    # train_dataset = DATAReader(args=args, split=args.split, labels=test_labels)
+    # train_loader = data.DataLoader(train_dataset, batch_size=24, shuffle=True)
 
-    print('Total train files: ', len(train_dataset))
+    # print('Total train files: ', len(train_dataset))
 
-    # Example: Iterate through the dataset
-    for batch_idx, (real_data, real_label, fake_data, fake_label) in enumerate(train_loader):
-        print(f"Batch {batch_idx+1}")
-        print(f"Real data shape: {real_data.shape}, Real label: {real_label}")
-        print(f"Fake data shape: {fake_data.shape}, Fake label: {fake_label}")
-        break  # Only for demonstration purposes, break after the first batch
+    # # Example: Iterate through the dataset
+    # for batch_idx, (real_data, real_label, fake_data, fake_label) in enumerate(train_loader):
+    #     print(f"Batch {batch_idx+1}")
+    #     print(f"Real data shape: {real_data.shape}, Real label: {real_label}")
+    #     print(f"Fake data shape: {fake_data.shape}, Fake label: {fake_label}")
+    #     break  # Only for demonstration purposes, break after the first batch

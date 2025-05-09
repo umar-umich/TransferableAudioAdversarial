@@ -611,7 +611,7 @@ class Model_ASSIST(nn.Module):
         last_hidden = self.drop(last_hidden)
         output = self.out_layer(last_hidden)
 
-        return last_hidden, output
+        return output #last_hidden, output
 
 
 def pad(x, max_len=64600):
