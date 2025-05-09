@@ -257,10 +257,10 @@ class ResNet1D(nn.Module):
         # self.softmax = nn.Softmax(dim=1)
         
     def forward(self, x):
-        # required for surrogate training
-        # nb_samp = x.shape[0]
-        # len_seq = x.shape[1]
-        # x=x.view(nb_samp,1,len_seq)
+        # required for surrogate training/testing
+        nb_samp = x.shape[0]
+        len_seq = x.shape[1]
+        x=x.view(nb_samp,1,len_seq)
         
         out = x
         

@@ -32,7 +32,7 @@ import datetime
 # os.makedirs(wav_dir_path, exist_ok=True)
 
 
-def plot_waveform_and_mel(audio1, audio2,epoch, index,wav_dir_path, sr=16000, title1="Real", title2="Generated"):
+def plot_waveform_and_mel(audio1, audio2,sample_index,generator_id, index,wav_dir_path, sr=16000, title1="Real", title2="Generated"):
     """
     Plot waveforms and Mel spectrograms of two audio samples side by side.
     """
@@ -62,7 +62,8 @@ def plot_waveform_and_mel(audio1, audio2,epoch, index,wav_dir_path, sr=16000, ti
     plt.tight_layout()
     # plt.show()
     
-    plt.savefig(osp.join(wav_dir_path, f'Fig_{epoch+1}_{index}.png'))
+    # plt.savefig(osp.join(wav_dir_path, f'Fig_{epoch+1}_{index}.png'))
+    plt.savefig(osp.join(wav_dir_path, f'Fig_{sample_index}_{generator_id}_{index}.png'))
     # Close the figure to free memory
     plt.close(fig)
 
@@ -88,7 +89,7 @@ def calculate_ssim(audio1, audio2):
     return ssim(audio1, audio2, data_range=1.0)
 
 
-def compare_audio_samples(real_audio, fake_audio, forged_transciption1, attacked_transciption1, epoch, index, wav_dir_path, sr=16000):
+def compare_audio_samples(real_audio, fake_audio, forged_transciption1, attacked_transciption1,sample_index, generator_id, index, wav_dir_path, sr=16000):
     """
     Compare two audio samples using PSNR and SSIM, and plot their waveforms and spectrograms.
     """
@@ -99,30 +100,30 @@ def compare_audio_samples(real_audio, fake_audio, forged_transciption1, attacked
         fake_audio = fake_audio.squeeze().cpu().numpy()
 
     # Plot waveforms and Mel spectrograms
-    plot_waveform_and_mel(real_audio, fake_audio,epoch, index,wav_dir_path, sr)
+    plot_waveform_and_mel(real_audio, fake_audio,sample_index,generator_id, index,wav_dir_path, sr)
 
     # Calculate PSNR
-    psnr_value = calculate_psnr(real_audio, fake_audio)
-    print(f"PSNR: {psnr_value:.2f}")
+    # psnr_value = calculate_psnr(real_audio, fake_audio)
+    # print(f"PSNR: {psnr_value:.2f}")
 
-    # Calculate SSIM
-    ssim_value = calculate_ssim(real_audio, fake_audio)
-    print(f"SSIM: {ssim_value:.4f}")
+    # # Calculate SSIM
+    # ssim_value = calculate_ssim(real_audio, fake_audio)
+    # print(f"SSIM: {ssim_value:.4f}")
 
     # Write results to a text file
-    results_file_path = os.path.join(wav_dir_path, f"metrics_epoch_{epoch+1}.txt")
-    os.makedirs(wav_dir_path, exist_ok=True)  # Ensure the directory exists
-    with open(results_file_path, "a") as file:
-        file.write("\n\n")
-        file.write(f"Epoch: {epoch+1}\n")
-        file.write(f"PSNR: {psnr_value:.2f}\n")
-        file.write(f"SSIM: {ssim_value:.4f}\n")
-        file.write("\nForged and Attacked Transcriptions (T1):\n")
-        file.write(f"{'Forged Transcription':<100} | {'Attacked Transcription':<100}\n")
-        file.write("=" * 205 + "\n")
+    # results_file_path = os.path.join(wav_dir_path, f"metrics_epoch_{epoch+1}.txt")
+    # os.makedirs(wav_dir_path, exist_ok=True)  # Ensure the directory exists
+    # with open(results_file_path, "a") as file:
+    #     file.write("\n\n")
+    #     file.write(f"Epoch: {epoch+1}\n")
+    #     file.write(f"PSNR: {psnr_value:.2f}\n")
+    #     file.write(f"SSIM: {ssim_value:.4f}\n")
+    #     file.write("\nForged and Attacked Transcriptions (T1):\n")
+    #     file.write(f"{'Forged Transcription':<100} | {'Attacked Transcription':<100}\n")
+    #     file.write("=" * 205 + "\n")
 
-        for forged, attacked in zip(forged_transciption1, attacked_transciption1):
-            file.write(f"{forged:<100} | {attacked:<100}\n")
+        # for forged, attacked in zip(forged_transciption1, attacked_transciption1):
+        #     file.write(f"{forged:<100} | {attacked:<100}\n")
 
         # file.write("\nForged and Attacked Transcriptions (T2):\n")
         # file.write(f"{'Forged Transcription':<100} | {'Attacked Transcription':<100}\n")
@@ -131,7 +132,7 @@ def compare_audio_samples(real_audio, fake_audio, forged_transciption1, attacked
         # for forged, attacked in zip(forged_transciption2, attacked_transciption2):
         #     file.write(f"{forged:<100} | {attacked:<100}\n")
 
-    print(f"Metrics saved to {results_file_path}")
+    # print(f"Metrics saved to {results_file_path}")
 
 
 
