@@ -52,7 +52,7 @@ def get_rawnet3():
     # rawnet_model = rawnet_model.to(device)  # Move model to the appropriate device
 
     # rawnet_model.eval()
-    print("RawNet3 initialised & weights loaded!")
+    # print("RawNet3 initialised & weights loaded!")
 
     return rawnet_model
 
@@ -94,8 +94,8 @@ def get_aasist(device):
 def get_ssdnet(model_type,device):
     if model_type == 'original':
         ssdnet_model = SSDNet1D()
-        check_point = torch.load("./weights/ssdnet/ssdnet_1.64.pth", map_location=device, weights_only=True)
-        ssdnet_model.load_state_dict(check_point['model_state_dict'])
+        check_point = torch.load("./weights/ssdnet/best_ssdnet_Combined_epoch_25.pth", map_location=device, weights_only=True)
+        ssdnet_model.load_state_dict(check_point)
     elif model_type == 'small':
         ssdnet_model = SSDNet1D_S()
         check_point = torch.load("./weights/ssdnet/best_ssdnet_S.pth", map_location=device, weights_only=True)
