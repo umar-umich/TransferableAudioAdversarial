@@ -26,7 +26,7 @@ If you find this work useful, please cite:
 
 ---
 
-## 🔥 Highlights
+## Highlights
 
 - **First transferable adversarial attack** for audio deepfake detection preserving transcription and perceptual integrity
 - **Significant vulnerabilities exposed** in SOTA systems: accuracy drops from **98% → 26%** (white-box), **92% → 54%** (gray-box), **94% → 84%** (black-box)
@@ -35,13 +35,13 @@ If you find this work useful, please cite:
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This repository introduces a novel GAN-based adversarial attack framework that generates transferable attacks while preserving both transcription integrity and perceptual quality. Unlike traditional methods, our approach uses ensemble surrogate models and self-supervised audio models to create realistic attacks that expose critical vulnerabilities in state-of-the-art audio deepfake detection systems.
 
 ---
 
-## 🔧 Installation
+## Installation
 
 ```bash
 # Clone repository
@@ -59,7 +59,7 @@ python scripts/download_models.py
 
 ---
 
-## 📦 Datasets
+## Datasets
 
 Download and organize the following datasets:
 
@@ -69,7 +69,7 @@ Download and organize the following datasets:
 
 ---
 
-## 🚀 Usage
+## Usage
 
 ### Training the baseline detection models
 
