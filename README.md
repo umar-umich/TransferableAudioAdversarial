@@ -45,7 +45,7 @@ This repository introduces a novel GAN-based adversarial attack framework that g
 
 ```bash
 # Clone repository
-git clone https://github.com/devloverumar/TransferableAudioAdversarial.git
+git clone https://github.com/umar-umich/TransferableAudioAdversarial.git
 cd TransferableAudioAdversarial
 
 # Install dependencies
@@ -80,10 +80,7 @@ python train_surrogate.py
 ### Generating Attacks
 
 ```bash
-python train.py \
-    --checkpoint ./checkpoints/best_model.pth \
-    --input_dir ./data/ASVspoof2019/LA/ASVspoof2019_LA_eval \
-    --output_dir ./attacks/asvspoof2019
+python train.py 
 ```
 
 ### Evaluation of Attacks
