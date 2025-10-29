@@ -1,10 +1,7 @@
 import argparse
-import csv
 import json
 
 import yaml
-from models.rsm1d.RSM1D import DilatedNet, SSDNet1D
-from test_data_loader_combined import TestDataLoaderCombined
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -118,26 +115,26 @@ def get_model(model_name, device):
     elif model_name.lower() == 'rawnet3':
         # Instantiate the rawnet3 model
         model = RawNetWithFC(embedding_dim=256, num_classes=2)
-        check_point = torch.load("./weights/rawnet3/best_rawnet3_Combined_epoch_15.pth", map_location=device, weights_only=True)
+        check_point = torch.load("./weights/rawnet_3/best_rawnet3_8.pth", map_location=device, weights_only=True)
         model.load_state_dict(check_point)
     elif model_name.lower() == 'rawnet2':
         # Instantiate the rawnet2 model
         with open("./models/rawnet/RawNet2_config.yaml", 'r') as f_yaml:
             parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
         model = RawNet2(parser1['model'], device)
-        check_point = torch.load("./weights/rawnet2/best_rawnet2_Combined_epoch_25.pth", map_location=device, weights_only=True)
+        check_point = torch.load("./weights/rawnet_2/best_rawnet2_4.pth", map_location=device, weights_only=True)
         model.load_state_dict(check_point)
     elif model_name.lower() == 'rawboost':
         # Instantiate the rawboost model
         with open("./models/rawboost/model_config_RawNet.yaml", 'r') as f_yaml:
             parser1 = yaml.load(f_yaml, Loader=yaml.FullLoader)
         model = RawNet(parser1['model'], device)
-        check_point = torch.load("./weights/rawboost/best_rawboost_Combined_epoch_15.pth", map_location=device, weights_only=True)
+        check_point = torch.load("./weights/rawboost/best_rawboost_4.pth", map_location=device, weights_only=True)
         model.load_state_dict(check_point)
     elif model_name.lower() == 'ssdnet':
         # SSDNet Model
-        model = SSDNet1D()    # SSDNet1D_S, DilatedNet_S, SSDNet1D_L, DilatedNet_L
-        check_point = torch.load("./weights/ssdnet/best_ssdnet_Combined_epoch_25.pth", map_location=device, weights_only=True)
+        model = SSDNet1D_L()    # SSDNet1D_S, DilatedNet_S, SSDNet1D_L, DilatedNet_L
+        check_point = torch.load("./weights/ssdnet/best_ssdnet_ratio_4_epoch_40.pth", map_location=device, weights_only=True)
         model.load_state_dict(check_point)
     elif model_name.lower() == 'ssdnet_small':
         model = SSDNet1D_S()
@@ -149,28 +146,18 @@ def get_model(model_name, device):
         model.load_state_dict(check_point)
     elif model_name.lower() == 'inc_ssdnet':
         # SSDNet Model
-        model = DilatedNet()    # SSDNet1D_S, DilatedNet_S, SSDNet1D_L, DilatedNet_L
-        check_point = torch.load("./weights/inc_ssdnet/best_inc_ssdnet_Combined_epoch_15.pth", map_location=device, weights_only=True)
-        model.load_state_dict(check_point)
-    elif model_name.lower() == 'inc_ssdnet_small':
-        # SSDNet Model
-        model = DilatedNet_S()    # SSDNet1D_S, DilatedNet_S, SSDNet1D_L, DilatedNet_L
-        check_point = torch.load("./weights/inc_ssdnet/best_inc_ssdnet_S.pth", map_location=device, weights_only=True)
-        model.load_state_dict(check_point)
-    elif model_name.lower() == 'inc_ssdnet_large':
-        # SSDNet Model
         model = DilatedNet_L()    # SSDNet1D_S, DilatedNet_S, SSDNet1D_L, DilatedNet_L
-        check_point = torch.load("./weights/inc_ssdnet/best_inc_ssdnet_L.pth", map_location=device, weights_only=True)
+        check_point = torch.load("./weights/inc_ssdnet/best_inc_ssdnet_ratio_4_epoch_40.pth", map_location=device, weights_only=True)
         model.load_state_dict(check_point)
     elif model_name.lower() == 'resnet1d':
         # ResNet1D
         model = ResNet1D(in_channels = 1 , base_filters = 128, kernel_size = 5, stride=2, groups = 1, n_block = 3, n_classes = 2)
-        check_point = torch.load("./weights/resnet1d/best_resnet1d_Combined_epoch_10.pth", map_location=device, weights_only=True)
+        check_point = torch.load("./weights/resnet/best_resnet_8.pth", map_location=device, weights_only=True)
         model.load_state_dict(check_point)
     elif model_name.lower() == 'msresnet':
         # MSResNet
         model = MSResNet(input_channel=1, layers=[1, 1, 1, 1], num_classes=2)
-        check_point = torch.load("./weights/msresnet/best_msresnet_Combined_epoch_10.pth", map_location=device, weights_only=True)
+        check_point = torch.load("./weights/msresnet/best_msresnet_ratio_4_epoch_10.pth", map_location=device, weights_only=True)
         model.load_state_dict(check_point)
     elif model_name.lower() == 'acnn1d':
         # ACNN1D
@@ -193,59 +180,16 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print(args)
 
-    # This should be 1 for every testing (ADD/AF)
-    args.ratio = 1
-    # test_dataset = RawNetDATAReader(args=args, split='In_The_Wild')
-    # test_loader = data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
-    # models_list = "aasist", "rawnet3", "rawnet2", "rawboost", "ssdnet", "ssdnet_small", "ssdnet_large"
-    #  "inc_ssdnet", "inc_ssdnet_small", "inc_ssdnet_large", "resnet1d", "msresnet"
-    datasets_root = "/data/Shared_Audio/A_Datasets"   # Awais local PC: "/mnt/f/Awais_data/Datasets"
+    args.ratio = 8
+    test_dataset = RawNetDATAReader(args=args, split='TEST')
+    test_loader = data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
 
-    model_list = ["rawnet3", "rawnet2", "rawboost", "ssdnet", "inc_ssdnet", "resnet1d", "msresnet"]
-    dataset_names = ["ASV_2019", "release_in_the_wild", "Halftruth"]
+    model_name = "msresnet" # models_list = "aasist", "rawnet3", "rawnet2", "rawboost", "ssdnet", "inc_ssdnet", "resnet1d", "msresnet", "acnn1d"
+    save_every=10
+    device_id = 3
+    device = torch.device('cuda',device_id)
+    model = get_model(model_name,device)
+    criterion = nn.CrossEntropyLoss()
 
-    csv_filename = "model_evaluation_results.csv"
-
-    # Write header to CSV
-    with open(csv_filename, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["Classifier", "ASVspoof2019", "In-the-wild", "HalfTruth", "Avg"])
-
-    data_results = []
-    column_sums = [0] * (len(dataset_names) + 1)  # To store sum of each dataset column and avg
-
-    for model_name in model_list:
-        results = [model_name]
-        accuracy_fake_values = []
-        
-        for i, dataset_name in enumerate(dataset_names):
-            test_dataset = TestDataLoaderCombined(datasets_root, dataset_name)
-            test_loader = data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True, drop_last=True)
-
-            device = torch.device('cuda', 2)
-            model = get_model(model_name, device)
-            criterion = nn.CrossEntropyLoss()
-            
-            test_accuracy, accuracy_real, accuracy_fake, auc, eer = evaluate_model(model, criterion, test_loader)
-            results.append(f"{accuracy_fake:.2f}")
-            accuracy_fake_values.append(accuracy_fake)
-
-            column_sums[i] += accuracy_fake  # Summing up for later average calculation
-        
-        avg_accuracy_fake = sum(accuracy_fake_values) / len(accuracy_fake_values)
-        results.append(f"{avg_accuracy_fake:.2f}")
-        column_sums[-1] += avg_accuracy_fake  # Summing up the last column (Avg)
-        
-        data_results.append(results)
-
-    # Compute final average for each column
-    avg_results = ["Average"] + [f"{column_sums[i] / len(model_list):.2f}" for i in range(len(column_sums))]
-
-    # Write results to CSV
-    with open(csv_filename, mode='a', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerows(data_results)
-        writer.writerow(avg_results)  # Append the final row for averages
-
-    print(f"Evaluation results saved to {csv_filename}")
-
+    test_accuracy,accuracy_real,accuracy_fake, auc, eer = evaluate_model(model, criterion, test_loader)
+    print(f"Test Accuracy: {test_accuracy:.2f}% - Real Accuracy: {accuracy_real:.2f}% -Fake Accuracy: {accuracy_fake:.2f}% - AUC: {auc:.2f} - EER: {eer:.4f}")
