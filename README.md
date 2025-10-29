@@ -86,7 +86,6 @@ python train.py
 ```bash
 python test.py
 ```
-Note: If you are facing any issues running this repository, please don't hesitate to create an issue or reach out to authors
 ---
 
 ## 📊 Results
@@ -115,6 +114,8 @@ Note: If you are facing any issues running this repository, please don't hesitat
 - Authors of surrogate models: Res-TSSDNet, Inc-TSSDNet, RawNet2, MS-ResNet
 
 ---
+
+For questions, feel free to reach out!
 
 ## 📄 License
 
