@@ -126,7 +126,7 @@ if __name__ == '__main__':
     # dev_labels_file = '/data/Umar/A_Datasets/release_in_the_wild/meta.csv'
     # labels = get_in_the_wild_labels(dev_labels_file)
     print('abc')
-
+    # testing
     # import argparse
     # parser = argparse.ArgumentParser()
     # parser.add_argument('--data_root', '-rt', type=str, default='/media/mufarooq/SSD_SMILES/Umar/UMFlint/Research/AA_Audio/ASV_2019/ASVspoof2019_LA_eval/flac', help='Root directory for the dataset')

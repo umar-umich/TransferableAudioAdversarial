@@ -1,5 +1,6 @@
 /CHECKPOINTS**
 /Wav_Plot**
-**/__pycache__
 /.vscode**
 /weights
+/__pycache__**
+**.pth
