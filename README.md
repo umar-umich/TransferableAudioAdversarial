@@ -51,8 +51,6 @@ cd TransferableAudioAdversarial
 # Install dependencies
 conda env create -f environment.yml
 
-# Download pretrained models
-python scripts/download_models.py
 ```
 
 **Requirements:** Python 3.9, PyTorch 2.5.1, CUDA 12.6
@@ -88,7 +86,7 @@ python train.py
 ```bash
 python test.py
 ```
-
+Note: If you are facing any issues running this repository, please don't hesitate to create an issue or reach out to authors
 ---
 
 ## 📊 Results
@@ -108,6 +106,13 @@ python test.py
 | **PSNR (dB)** | 39.79 | 43.56 | 39.45 |
 | **SSIM** | 0.99 | 0.98 | 0.96 |
 | **Text Similarity** | 0.95 | 0.87 | 1.00 |
+
+---
+
+## Acknowledgments
+
+- ASVspoof Challenge organizers for benchmark datasets
+- Authors of surrogate models: Res-TSSDNet, Inc-TSSDNet, RawNet2, MS-ResNet
 
 ---
 
